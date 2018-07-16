@@ -8,6 +8,7 @@ const router = express.Router();
 app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
 app.set('views', path.join(__dirname, '/views/'));
+app.use('/static', express.static(path.join(__dirname, '../public/')));
 
 router.get('/app', (req, res) => {
     res.render(
@@ -20,4 +21,4 @@ app.use('/ms', router);
 
 app.listen(8080, () => {
     process.stdout.write(`Starting the ms application on port 8080 with development environment`);
-  });
+});
