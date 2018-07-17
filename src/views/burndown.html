@@ -12,17 +12,29 @@
 </style>
 
 <body>
-    <div style="width:75%;">
-        <canvas id="canvas"></canvas>
-    </div>
+    <div class='container'>
+        <div style="width:90%;">
+            <canvas id="canvas"></canvas>
+        </div>
+    
     <br>
-    <br>
-    <button id="randomizeData">Randomize Data</button>
-    <button id="addDataset">Add Dataset</button>
-    <button id="removeDataset">Remove Dataset</button>
-    <button id="addData">Add Data</button>
-    <button id="removeData">Remove Data</button>
-
+    <div class='input-group'>
+        <div class='container-fluid'>
+            <div class='row'>
+                <div class="col-md-12 col-md-5 col-lg-3">
+                    <label for='remaining'>Remaining</label>
+                    <input class="form-control" id='remaining' type='number' placeholder='Remaining tasks'>
+                    <label for='bugs'>Bugs</label>
+                    <input class="form-control" id='bugs' type='number' placeholder='Bugs'>
+                    <label for='extra'>Extra</label>
+                    <input class="form-control" id='extra' type='number' placeholder='Extra tasks'>
+                    <label for='improvements'>Improvements</label>
+                    <input class="form-control" id='improvements' type='number' placeholder='Improvements'>
+                    <button class="form-control" id='submit'>Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div></div>
     <script>
 
         var DAYS = [];
@@ -43,32 +55,28 @@
                 labels: DAYS,
                 datasets: [{
                     label: 'Remaining tasks',
-                    backgroundColor: window.chartColors.red,
-                    borderColor: window.chartColors.red,
-                    data: [
-                        10,
-                        9,
-                        8,
-                        7,
-                        6,
-                        5,
-                        4
-                    ],
+                    backgroundColor: window.chartColors.blue,
+                    borderColor: window.chartColors.blue,
+                    data: [],
                     fill: false,
                 }, {
                     label: 'bugs',
                     fill: false,
-                    backgroundColor: window.chartColors.blue,
-                    borderColor: window.chartColors.blue,
-                    data: [
-                        25,
-                        21,
-                        15,
-                        10,
-                        8,
-                        3,
-                        1
-                    ],
+                    backgroundColor: window.chartColors.red,
+                    borderColor: window.chartColors.red,
+                    data: [],
+                }, {
+                    label: 'extra',
+                    fill: false,
+                    backgroundColor: window.chartColors.yellow,
+                    borderColor: window.chartColors.yellow,
+                    data: []
+                }, {
+                    label: 'improvements',
+                    fill: false,
+                    backgroundColor: window.chartColors.green,
+                    borderColor: window.chartColors.green,
+                    data: []
                 }]
             },
             options: {
@@ -110,18 +118,7 @@
             window.myLine = new Chart(ctx, config);
         };
 
-        document.getElementById('randomizeData').addEventListener('click', function () {
-            config.data.datasets.forEach(function (dataset) {
-                dataset.data = dataset.data.map(function () {
-                    return randomScalingFactor();
-                });
-
-            });
-
-            window.myLine.update();
-        });
-
-        var colorNames = Object.keys(window.chartColors);
+        /*var colorNames = Object.keys(window.chartColors);
         document.getElementById('addDataset').addEventListener('click', function () {
             var colorName = colorNames[config.data.datasets.length % colorNames.length];
             var newColor = window.chartColors[colorName];
@@ -132,34 +129,46 @@
                 data: [],
                 fill: false
             };
-
+ 
             for (var index = 0; index < config.data.labels.length; ++index) {
                 newDataset.data.push(randomScalingFactor());
             }
-
+ 
             config.data.datasets.push(newDataset);
             window.myLine.update();
-        });
+        });*/
 
-        document.getElementById('addData').addEventListener('click', function () {
+        /*document.getElementById('addData').addEventListener('click', function () {
             if (config.data.datasets.length > 0) {
                 var month = MONTHS[config.data.labels.length % MONTHS.length];
                 config.data.labels.push(month);
-
+ 
                 config.data.datasets.forEach(function (dataset) {
                     dataset.data.push(randomScalingFactor());
                 });
-
+ 
                 window.myLine.update();
             }
-        });
+        });*/
 
-        document.getElementById('removeDataset').addEventListener('click', function () {
-            config.data.datasets.splice(0, 1);
+        document.getElementById('submit').addEventListener('click', function () {
+            var remaining = document.getElementById('remaining');
+            var bugs = document.getElementById('bugs');
+            var extra = document.getElementById('extra');
+            var improvements = document.getElementById('improvements');
+            console.log(remaining.value,
+                bugs.value,
+                extra.value,
+                improvements.value
+            );
+            config.data.datasets[0].data.push(remaining.value);
+            config.data.datasets[1].data.push(bugs.value);
+            config.data.datasets[2].data.push(extra.value);
+            config.data.datasets[3].data.push(improvements.value);
             window.myLine.update();
         });
 
-        document.getElementById('removeData').addEventListener('click', function () {
+        /*document.getElementById('removeData').addEventListener('click', function () {
             config.data.labels.splice(-1, 1); // remove the label first
 
             config.data.datasets.forEach(function (dataset) {
@@ -167,7 +176,7 @@
             });
 
             window.myLine.update();
-        });
+        });*/
     </script>
 </body>
 {% endblock %}
