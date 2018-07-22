@@ -10,6 +10,8 @@ COPY . .
 
 RUN npm install
 
+RUN npm install express body-parser
+
 EXPOSE 8080
 
 CMD ["node", "src/index.js"]

@@ -1,9 +1,14 @@
+'use strict'
+
 const express = require('express');
+const bodyParser = require('body-parser')
 const path = require('path');
 const swig = require('swig');
 
 const app = express();
 const router = express.Router();
+
+app.use(bodyParser.urlencoded({ extended: false }))
 
 app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
@@ -22,6 +27,29 @@ router.get('/burndown', (req, res) => {
         'burndown.html',
         {}
     );
+});
+
+router.post('/burndown', (req, res) => {
+    var fs = require('fs')
+    var data = {}
+    data.table = []
+
+    const remaining = req.body.remaining;
+    const bugs = req.body.bugs;
+    const extra = req.body.extra;
+    const improvements = req.body.improvements
+
+    res.set('Content-Type', 'text/plain')
+    res.send(`Remaining: ${remaining} \nBugs: ${bugs} \nExtra: ${extra} \nImprovements: ${improvements}`);
+    data.table.push(remaining, bugs, extra, improvements);
+
+    console.log(data.table);
+
+    fs.writeFile("myjsonfile.json", JSON.stringify(data), function (err) {
+        if (err) throw err;
+        console.log('complete');
+    });
+    res.redirect('/burndown');
 });
 
 app.use('/', router);
