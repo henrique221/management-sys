@@ -8,6 +8,8 @@ const swig = require('swig');
 const app = express();
 const router = express.Router();
 
+var connect = require('./models/model')
+
 app.use(bodyParser.urlencoded({ extended: false }))
 
 app.engine('html', swig.renderFile);
