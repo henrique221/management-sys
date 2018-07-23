@@ -1,15 +1,15 @@
 {
-  "name": "example-mysql-node-docker",
+  "name": "management-system",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
   },
-  "author": "",
-  "license": "MIT",
   "dependencies": {
-    "express": "^4.14.0",
-    "mysql": "^2.11.1"
+    "express": "^4.16.3",
+    "swig": "^1.4.2"
   }
 }

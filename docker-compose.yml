@@ -1,5 +1,28 @@
-version: '2.1'
+version: '3.3'
+
+volumes:
+  data:
+
 services:
+
+    db:
+      image: mysql:5.6
+      ports:
+        - "3306:3306"
+      volumes:
+        - data:/var/lib/mysql
+      environment:
+        - MYSQL_ROOT_PASSWORD=password
+        - MYSQL_DATABASE=app_development
+    app:
+      image: phpmyadmin/phpmyadmin:latest
+      links:
+        - db
+      ports:
+        - 81:80
+      environment:
+        - PMA_ARBITRARY=1
+
     application:
       build: .
       command: "npm run dev"
