@@ -8,7 +8,9 @@ const swig = require('swig');
 const app = express();
 const router = express.Router();
 
-var connect = require('./models/model')
+const datas = require('./views/data')
+datas.sprint.nome = 'Sprint test'
+const {insertSprint, insertProgresso} = require('./models/model')
 
 app.use(bodyParser.urlencoded({ extended: false }))
 
@@ -36,16 +38,26 @@ router.post('/burndown', (req, res) => {
     var data = {}
     data.table = []
 
+    const date = req.body.date;
     const remaining = req.body.remaining;
     const bugs = req.body.bugs;
     const extra = req.body.extra;
     const improvements = req.body.improvements
 
+    datas.progresso.data = date
+    datas.progresso.remainingTasks = remaining
+    datas.progresso.bugs = bugs
+    datas.progresso.extraTasks = extra
+    datas.progresso.improvements = improvements
+
+    //insertSprint(datas.sprint);
+    insertProgresso(datas.progresso);
+
     res.set('Content-Type', 'text/plain')
-    res.send(`Remaining: ${remaining} \nBugs: ${bugs} \nExtra: ${extra} \nImprovements: ${improvements}`);
+    res.send(`Remaining: ${datas.progresso.remainingTasks} \nBugs: ${datas.progresso.bugs} \nExtra: ${datas.progresso.extraTasks} \nImprovements: ${datas.progresso.improvements} \n`);
     data.table.push(remaining, bugs, extra, improvements);
 
-    console.log(data.table);
+    //console.log(data.table);
 
     fs.writeFile("myjsonfile.json", JSON.stringify(data), function (err) {
         if (err) throw err;
@@ -53,6 +65,7 @@ router.post('/burndown', (req, res) => {
     });
     res.redirect('/burndown');
 });
+
 
 app.use('/', router);
 
