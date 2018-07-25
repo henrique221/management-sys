@@ -40,7 +40,7 @@
             </div>
         </form>
     </div>
-
+    {{conteudo}}
     <script>
         var DAYS = [];
         var DATAS = [];
@@ -123,7 +123,6 @@
             }
         };
 
-
         window.onload = function () {
             var ctx = document.getElementById('canvas').getContext('2d');
             window.myLine = new Chart(ctx, config);
@@ -134,7 +133,6 @@
             var bugs = document.getElementById('bugs');
             var extra = document.getElementById('extra');
             var improvements = document.getElementById('improvements');
-
             config.data.datasets[0].data.push(remaining.value);
             config.data.datasets[1].data.push(bugs.value);
             config.data.datasets[2].data.push(extra.value);

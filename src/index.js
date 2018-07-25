@@ -9,8 +9,7 @@ const app = express();
 const router = express.Router();
 
 const datas = require('./views/data')
-datas.sprint.nome = 'Sprint test'
-const {insertSprint, insertProgresso} = require('./models/model')
+const { insertSprint, insertProgresso, selectProgresso } = require('./models/model')
 
 app.use(bodyParser.urlencoded({ extended: false }))
 
@@ -26,12 +25,24 @@ router.get('/home', (req, res) => {
     );
 });
 
+const conteudo = selectProgresso(function(err, content){
+    if (err) {
+        console.log(err);
+        
+    } else {
+        return content;
+        content.selectProgresso
+    }
+})
+console.log({conteudo})
+
 router.get('/burndown', (req, res) => {
-    res.render(
-        'burndown.html',
-        {}
-    );
-});
+        res.render(
+            'burndown.html'),
+            {}
+        });
+
+
 
 router.post('/burndown', (req, res) => {
     var fs = require('fs')
@@ -50,19 +61,10 @@ router.post('/burndown', (req, res) => {
     datas.progresso.extraTasks = extra
     datas.progresso.improvements = improvements
 
-    //insertSprint(datas.sprint);
     insertProgresso(datas.progresso);
 
-    res.set('Content-Type', 'text/plain')
-    res.send(`Remaining: ${datas.progresso.remainingTasks} \nBugs: ${datas.progresso.bugs} \nExtra: ${datas.progresso.extraTasks} \nImprovements: ${datas.progresso.improvements} \n`);
     data.table.push(remaining, bugs, extra, improvements);
 
-    //console.log(data.table);
-
-    fs.writeFile("myjsonfile.json", JSON.stringify(data), function (err) {
-        if (err) throw err;
-        console.log('complete');
-    });
     res.redirect('/burndown');
 });
 

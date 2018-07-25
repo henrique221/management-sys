@@ -10,17 +10,25 @@ var con = mysql.createConnection({
 function insertSprint(sprint) {
   con.connect(function (err) {
     if (err) throw err;
-    con.query(`INSERT INTO sprint (nome, start_date, end_date, total_tasks) VALUES ('${sprint.nome}' , '${sprint.startDate}' , '${sprint.endDate}' , '${sprint.totalTasks}')`, function (err, result, fields) {
-      if (err) throw err;
-      console.log(result);
-    });
+    con.query(`
+      INSERT INTO sprint 
+      (nome, start_date, end_date, total_tasks)
+      VALUES ('${sprint.nome}',
+      '${sprint.startDate}',
+      '${sprint.endDate}',
+      '${sprint.totalTasks}'
+      )`,
+      function (err, fields) {
+        if (err) throw err;
+
+      }
+    );
   });
 }
 
 function insertProgresso(progresso) {
   con.connect(function (err) {
     if (err) throw err;
-    console.log(progresso)
     con.query(`
       INSERT INTO progresso 
       (id_sprint, data, remaining_tasks, bugs, improvements, extra_tasks) 
@@ -32,13 +40,31 @@ function insertProgresso(progresso) {
         ${progresso.improvements}, 
         ${progresso.extraTasks}
       )`,
-      function (err, result, fields) {
+      function (err, rows) {
         if (err) throw err;
-        console.log(result);
+
       }
     );
   });
 }
 
+function selectProgresso(callback) {
+  con.connect(function (err) {
+    if (err) throw err;
+    con.query(`SELECT * FROM progresso`,
+      function (err, rows) {
+        if (err) {
+          callback(err, null)
+        } else
+          callback(null, rows);
+      }
+
+    );
+  });
+}
+
+
+
 module.exports.insertSprint = insertSprint;
 module.exports.insertProgresso = insertProgresso;
+module.exports.selectProgresso = selectProgresso;
