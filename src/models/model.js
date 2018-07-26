@@ -6,10 +6,8 @@ var con = mysql.createConnection({
   database: "burndown",
   password: "password"
 });
-
+con.connect()
 function insertSprint(sprint) {
-  con.connect(function (err) {
-    if (err) throw err;
     con.query(`
       INSERT INTO sprint 
       (nome, start_date, end_date, total_tasks)
@@ -23,12 +21,9 @@ function insertSprint(sprint) {
 
       }
     );
-  });
 }
 
 function insertProgresso(progresso) {
-  con.connect(function (err) {
-    if (err) throw err;
     con.query(`
       INSERT INTO progresso 
       (id_sprint, data, remaining_tasks, bugs, improvements, extra_tasks) 
@@ -45,24 +40,18 @@ function insertProgresso(progresso) {
 
       }
     );
-  });
 }
 
 function selectProgresso(callback) {
-  con.connect(function (err) {
-    if (err) throw err;
-    con.query(`SELECT * FROM progresso`,
-      function (err, rows) {
-        if (err) {
-          callback(err, null)
-        } else
-          callback(null, rows);
-      }
+    con.query(`SELECT * FROM progresso`, function (err, rows) {
+      if (err) {
+        callback(err, null)
+      } else
+        callback(null, rows);
+    }
 
     );
-  });
 }
-
 
 
 module.exports.insertSprint = insertSprint;

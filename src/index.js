@@ -25,22 +25,32 @@ router.get('/home', (req, res) => {
     );
 });
 
-const conteudo = selectProgresso(function(err, content){
+/*var conteudo = selectProgresso(function (err, content) {
     if (err) {
         console.log(err);
-        
+
     } else {
-        return content;
-        content.selectProgresso
+        var conteudo = content
+        return conteudo;
     }
-})
-console.log({conteudo})
+})*/
+
 
 router.get('/burndown', (req, res) => {
-        res.render(
-            'burndown.html'),
-            {}
-        });
+    selectProgresso(function (err, content) {
+        if (err) {
+            console.log(err)
+        } else {
+            console.log(content)
+            // var jsonContent = JSON.stringify(content)
+            res.render(
+                'burndown.html',
+                { conteudo: content } 
+            )
+        }
+    })
+
+});
 
 
 
@@ -60,6 +70,8 @@ router.post('/burndown', (req, res) => {
     datas.progresso.bugs = bugs
     datas.progresso.extraTasks = extra
     datas.progresso.improvements = improvements
+
+    console.log(datas)
 
     insertProgresso(datas.progresso);
 

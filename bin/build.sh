@@ -1,3 +1,1 @@
-docker-compose build
-
 yarn

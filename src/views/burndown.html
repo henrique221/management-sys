@@ -40,11 +40,27 @@
             </div>
         </form>
     </div>
-    {{conteudo}}
+    
     <script>
+        console.log({{content}})
         var DAYS = [];
         var DATAS = [];
         var day = new Date();
+
+
+        var dbBugs = []
+        var dbRemaining = []
+        var dbImprovements = []
+        var dbExtras = []
+        
+        {% for item in conteudo %}
+            dbRemaining.push({{ item.remaining_tasks }})
+            dbBugs.push({{ item.bugs }})
+            dbImprovements.push({{ item.improvements }})
+            dbExtras.push({{ item.extra_tasks }})
+        {% endfor %}
+
+        
 
         let month = day.toLocaleDateString('pt-br', {
             month: '2-digit',
@@ -66,28 +82,28 @@
                 labels: DAYS,
                 datasets: [{
                     label: 'Remaining tasks',
+                    fill: false,
                     backgroundColor: window.chartColors.blue,
                     borderColor: window.chartColors.blue,
-                    data: [],
-                    fill: false,
+                    data: dbRemaining
                 }, {
                     label: 'bugs',
                     fill: false,
                     backgroundColor: window.chartColors.red,
                     borderColor: window.chartColors.red,
-                    data: [],
+                    data: dbBugs,
                 }, {
                     label: 'extra',
                     fill: false,
                     backgroundColor: window.chartColors.yellow,
                     borderColor: window.chartColors.yellow,
-                    data: []
+                    data: dbExtras
                 }, {
                     label: 'improvements',
                     fill: false,
                     backgroundColor: window.chartColors.green,
                     borderColor: window.chartColors.green,
-                    data: []
+                    data: dbImprovements
                 }]
             },
             options: {
@@ -122,12 +138,12 @@
                 }
             }
         };
-
+        
         window.onload = function () {
             var ctx = document.getElementById('canvas').getContext('2d');
             window.myLine = new Chart(ctx, config);
         };
-
+        
         document.getElementById('submit').addEventListener('click', function () {
             var remaining = document.getElementById('remaining');
             var bugs = document.getElementById('bugs');
