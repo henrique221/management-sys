@@ -7,6 +7,7 @@ const swig = require('swig');
 
 const app = express();
 const router = express.Router();
+const moment = require('moment')
 
 const datas = require('./views/data')
 const { insertSprint, insertProgresso, selectProgresso } = require('./models/model')
@@ -25,15 +26,12 @@ router.get('/home', (req, res) => {
     );
 });
 
-/*var conteudo = selectProgresso(function (err, content) {
-    if (err) {
-        console.log(err);
-
-    } else {
-        var conteudo = content
-        return conteudo;
-    }
-})*/
+router.get('/sprint', (req, res) => {
+    res.render(
+        'sprint.html',
+        {}
+    );
+});
 
 
 router.get('/burndown', (req, res) => {
@@ -41,11 +39,16 @@ router.get('/burndown', (req, res) => {
         if (err) {
             console.log(err)
         } else {
-            console.log(content)
+            const items = {}
+            for (const item of content) {
+                var date = moment(item.data)
+                items[date.format("DD/MM/YYYY")] = item
+            }
+            console.log(items)
             // var jsonContent = JSON.stringify(content)
             res.render(
                 'burndown.html',
-                { conteudo: content } 
+                { items: items } 
             )
         }
     })

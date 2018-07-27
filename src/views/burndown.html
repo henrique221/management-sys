@@ -10,7 +10,6 @@
         -ms-user-select: none;
     }
 </style>
-
 <body>
     <div class='container'>
         <div style="width:90%;">
@@ -40,9 +39,7 @@
             </div>
         </form>
     </div>
-    
-    <script>
-        console.log({{content}})
+    <script>        
         var DAYS = [];
         var DATAS = [];
         var day = new Date();
@@ -53,14 +50,13 @@
         var dbImprovements = []
         var dbExtras = []
         
-        {% for item in conteudo %}
-            dbRemaining.push({{ item.remaining_tasks }})
-            dbBugs.push({{ item.bugs }})
-            dbImprovements.push({{ item.improvements }})
-            dbExtras.push({{ item.extra_tasks }})
+        {% for dado in items %}
+            dbRemaining.push({{ dado.remaining_tasks }})
+            dbBugs.push({{ dado.bugs }})
+            dbImprovements.push({{ dado.improvements }})
+            dbExtras.push({{ dado.extra_tasks }})
         {% endfor %}
 
-        
 
         let month = day.toLocaleDateString('pt-br', {
             month: '2-digit',
@@ -99,11 +95,11 @@
                     borderColor: window.chartColors.yellow,
                     data: dbExtras
                 }, {
-                    label: 'improvements',
+                    label: `improvements ${dbImprovements[3]}`,
                     fill: false,
                     backgroundColor: window.chartColors.green,
                     borderColor: window.chartColors.green,
-                    data: dbImprovements
+                    data: dbImprovements,
                 }]
             },
             options: {

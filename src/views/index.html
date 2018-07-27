@@ -1,2 +1,11 @@
-{% set home = "active" %}
-{% extends "layout/main.html" %}
+{% extends "layout/main.html" %} {% block content %}
+
+<p class="text-center text-nowrap" style="font-size:50px; color: green;">Bem vindo</p>
+<div style='height:300px' class="d-flex justify-content-center align-items-center ">
+    <button class="btn btn-outline-primary btn-lg" onclick="location.href='sprint'">Criar nova Sprint</button>
+    <button class="btn btn-outline-success btn-lg" onclick="location.href='burndown'">Acessar burndown</button>
+</div>
+
+
+
+{% endblock %}

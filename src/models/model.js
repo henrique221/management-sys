@@ -7,8 +7,9 @@ var con = mysql.createConnection({
   password: "password"
 });
 con.connect()
+
 function insertSprint(sprint) {
-    con.query(`
+  con.query(`
       INSERT INTO sprint 
       (nome, start_date, end_date, total_tasks)
       VALUES ('${sprint.nome}',
@@ -16,15 +17,15 @@ function insertSprint(sprint) {
       '${sprint.endDate}',
       '${sprint.totalTasks}'
       )`,
-      function (err, fields) {
-        if (err) throw err;
+    function (err, fields) {
+      if (err) throw err;
 
-      }
-    );
+    }
+  );
 }
 
 function insertProgresso(progresso) {
-    con.query(`
+  con.query(`
       INSERT INTO progresso 
       (id_sprint, data, remaining_tasks, bugs, improvements, extra_tasks) 
       VALUES (
@@ -35,22 +36,22 @@ function insertProgresso(progresso) {
         ${progresso.improvements}, 
         ${progresso.extraTasks}
       )`,
-      function (err, rows) {
-        if (err) throw err;
+    function (err, rows) {
+      if (err) throw err;
 
-      }
-    );
+    }
+  );
 }
 
 function selectProgresso(callback) {
-    con.query(`SELECT * FROM progresso`, function (err, rows) {
+  con.query(`SELECT * FROM progresso`, function (err, rows) {
       if (err) {
         callback(err, null)
       } else
         callback(null, rows);
     }
 
-    );
+  );
 }
 
 
