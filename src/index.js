@@ -8,6 +8,7 @@ const swig = require('swig');
 const app = express();
 const router = express.Router();
 const moment = require('moment')
+const business = require('moment-business')
 
 const datas = require('./views/data')
 const { insertSprint, insertProgresso, selectProgresso } = require('./models/model')
@@ -35,20 +36,43 @@ router.get('/sprint', (req, res) => {
 
 
 router.get('/burndown', (req, res) => {
+    
     selectProgresso(function (err, content) {
         if (err) {
             console.log(err)
         } else {
-            const items = {}
+            var totalTasks = 30;
+            var dayAmount = 15;
+            var resto = totalTasks/dayAmount
+            var ideal = []
+
+            for(let count = 0; count <= dayAmount; count ++){
+                ideal.push(totalTasks);
+                totalTasks = totalTasks - resto
+            }
+            console.log('\n',ideal)
+            var items = {}
             for (const item of content) {
                 var date = moment(item.data)
-                items[date.format("DD/MM/YYYY")] = item
+                items[date.format("DD-MM-YYYY")] = item
             }
-            console.log(items)
-            // var jsonContent = JSON.stringify(content)
+            var firstDate = moment([2018, 6, 29]);
+            var datas = []
+            var dayCount = firstDate
+            for(let day = 0; datas.length <= dayAmount; day ++){
+                if(business.isWeekDay(dayCount)){
+                    datas.push(dayCount.format('DD/MM ddd'))
+                    dayCount = moment(dayCount).add(1, "days")
+                }else{
+                    business.addWeekDays(dayCount, 1)
+                }
+            }
+            //console.log('\n',datas)
+
+            
             res.render(
                 'burndown.html',
-                { items: items } 
+                { items , date, datas, ideal} 
             )
         }
     })
@@ -86,6 +110,4 @@ router.post('/burndown', (req, res) => {
 
 app.use('/', router);
 
-app.listen(8080, () => {
-    process.stdout.write(`Starting the ms application on port 8080 with development environment`);
-});
+app.listen(8080);

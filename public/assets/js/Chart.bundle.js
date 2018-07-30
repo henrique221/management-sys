@@ -10725,7 +10725,7 @@
         defaultColor: 'rgba(0,0,0,0.1)',
         defaultFontColor: '#666',
         defaultFontFamily: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
-        defaultFontSize: 12,
+        defaultFontSize: 15,
         defaultFontStyle: 'normal',
         showLines: true,
     
@@ -11578,11 +11578,11 @@
         gridLines: {
             display: true,
             color: 'rgba(0, 0, 0, 0.1)',
-            lineWidth: 1,
+            lineWidth: 2,
             drawBorder: true,
             drawOnChartArea: true,
             drawTicks: true,
-            tickMarkLength: 10,
+            tickMarkLength: 1,
             zeroLineWidth: 1,
             zeroLineColor: 'rgba(0,0,0,0.25)',
             zeroLineBorderDash: [],
@@ -11605,21 +11605,21 @@
     
             // top/bottom padding
             padding: {
-                top: 4,
-                bottom: 4
+                top: 1,
+                bottom: 1
             }
         },
     
         // label settings
         ticks: {
-            beginAtZero: false,
-            minRotation: 0,
+            beginAtZero: true,
+            minRotation: 50,
             maxRotation: 50,
             mirror: false,
-            padding: 0,
+            padding: 10,
             reverse: false,
             display: true,
-            autoSkip: true,
+            autoSkip: false,
             autoSkipPadding: 0,
             labelOffset: 0,
             // We pass through arrays to be rendered as multiline labels, we convert Others to strings here.

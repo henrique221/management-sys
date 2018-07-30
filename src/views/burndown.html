@@ -43,12 +43,13 @@
         var DAYS = [];
         var DATAS = [];
         var day = new Date();
-
+        
 
         var dbBugs = []
         var dbRemaining = []
         var dbImprovements = []
         var dbExtras = []
+        var dbIdeal = []
         
         {% for dado in items %}
             dbRemaining.push({{ dado.remaining_tasks }})
@@ -56,6 +57,13 @@
             dbImprovements.push({{ dado.improvements }})
             dbExtras.push({{ dado.extra_tasks }})
         {% endfor %}
+
+        {% for dado in ideal %}
+            dbIdeal.push({{dado}})
+        {% endfor %}
+        
+        dbIdeal.push(0)
+
 
 
         let month = day.toLocaleDateString('pt-br', {
@@ -65,13 +73,13 @@
         var now = (day.getFullYear() + '-' + month + '-' + day.getDate());
 
         document.getElementById('date').setAttribute('value', now);
-
-        for (i = 0; i <= 10; i++) {
-
-            DATAS.push(day.getDate() + '/' + day.getMonth() + '/' + day.getFullYear());
+        var i = 0
+        {% for item in datas %}
+            console.log('{{item}}')
+            DATAS.push('{{item}}');
             DAYS[i] = DATAS[i];
-            day.setDate(day.getDate() + 1);
-        };
+            i = i+1
+        {%endfor%}
         var config = {
             type: 'line',
             data: {
@@ -95,12 +103,19 @@
                     borderColor: window.chartColors.yellow,
                     data: dbExtras
                 }, {
-                    label: `improvements ${dbImprovements[3]}`,
+                    label: `improvements`,
                     fill: false,
                     backgroundColor: window.chartColors.green,
                     borderColor: window.chartColors.green,
                     data: dbImprovements,
-                }]
+                }, {
+                    label: `ideal`,
+                    fill: false,
+                    backgroundColor: window.chartColors.black,
+                    borderColor: window.chartColors.black,
+                    data: dbIdeal,
+                }
+            ]
             },
             options: {
                 responsive: true,
@@ -152,6 +167,7 @@
 
             window.myLine.update();
         });
+        
     </script>
 </body>
 {% endblock %}
