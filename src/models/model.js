@@ -50,11 +50,38 @@ function selectProgresso(callback) {
       } else
         callback(null, rows);
     }
-
   );
+}
+
+function insertSprint(sprint) {
+  con.query(`
+      INSERT INTO sprint 
+      (nome, start_date, days, total_tasks) 
+      VALUES (
+        '${sprint.nome}', 
+        '${sprint.date}', 
+        ${sprint.dias},
+        ${sprint.tasks}
+      )`,
+    function (err, rows) {
+      if (err) throw err;
+
+    }
+  );
+}
+
+function selectSprint(callback) {
+  con.query(`SELECT * FROM sprint`, function(err, rows){
+    if (err) {
+      callback(null, rows);
+    } else 
+      callback(null, rows);
+  })
 }
 
 
 module.exports.insertSprint = insertSprint;
 module.exports.insertProgresso = insertProgresso;
 module.exports.selectProgresso = selectProgresso;
+module.exports.selectSprint = selectSprint;
+module.exports.insertSprint = insertSprint;

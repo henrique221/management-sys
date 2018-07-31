@@ -9,9 +9,9 @@ const app = express();
 const router = express.Router();
 const moment = require('moment')
 const business = require('moment-business')
+const fs = require('fs')
 
-const datas = require('./views/data')
-const { insertSprint, insertProgresso, selectProgresso } = require('./models/model')
+const { insertSprint, insertProgresso, selectProgresso, selectSprint } = require('./models/model')
 
 app.use(bodyParser.urlencoded({ extended: false }))
 
@@ -27,30 +27,27 @@ router.get('/home', (req, res) => {
     );
 });
 
-router.get('/sprint', (req, res) => {
-    res.render(
-        'sprint.html',
-        {}
-    );
-});
-
-
 router.get('/burndown', (req, res) => {
     
     selectProgresso(function (err, content) {
         if (err) {
             console.log(err)
         } else {
-            var totalTasks = 30;
-            var dayAmount = 15;
-            var resto = totalTasks/dayAmount
+            var totalTasks = 35;
+            var dayAmount = 11;
+            var divide = totalTasks/dayAmount
             var ideal = []
-
+            var idealInt = []
+            var title = 'New Sprint'
+            var now = new Date();
+            var dateMoment = moment(now).format('YYYY-MM-DD')
             for(let count = 0; count <= dayAmount; count ++){
-                ideal.push(totalTasks);
-                totalTasks = totalTasks - resto
+                if(totalTasks >= 0){
+                    ideal.push(totalTasks);
+                    idealInt.push((ideal[count])>>0)
+                    totalTasks = totalTasks - divide
+                }
             }
-            console.log('\n',ideal)
             var items = {}
             for (const item of content) {
                 var date = moment(item.data)
@@ -67,47 +64,58 @@ router.get('/burndown', (req, res) => {
                     business.addWeekDays(dayCount, 1)
                 }
             }
-            //console.log('\n',datas)
-
-            
             res.render(
                 'burndown.html',
-                { items , date, datas, ideal} 
+                { items , date, datas, ideal , title, dateMoment} 
             )
         }
     })
 
 });
-
-
-
 router.post('/burndown', (req, res) => {
-    var fs = require('fs')
     var data = {}
     data.table = []
+    var progresso = {idSprint: 2, date: null, remainingTasks: null, bugs: null, improvements: null, extraTasks: null}
+    var dataSprint = {nome : 'Sprint 1', date : null, dias : null, tasks : null}
 
-    const date = req.body.date;
-    const remaining = req.body.remaining;
-    const bugs = req.body.bugs;
-    const extra = req.body.extra;
-    const improvements = req.body.improvements
+    progresso.data = req.body.date;
+    progresso.remainingTasks = req.body.remaining;
+    progresso.bugs = req.body.bugs;
+    progresso.extra = req.body.extra;
+    progresso.improvements = req.body.improvements
 
-    datas.progresso.data = date
-    datas.progresso.remainingTasks = remaining
-    datas.progresso.bugs = bugs
-    datas.progresso.extraTasks = extra
-    datas.progresso.improvements = improvements
-
-    console.log(datas)
-
-    insertProgresso(datas.progresso);
-
-    data.table.push(remaining, bugs, extra, improvements);
+    dataSprint.date = req.body.initialDate;
+    dataSprint.dias = req.body.dias;
+    dataSprint.tasks = req.body.tasks;
+    
+    if(progresso.data || progresso.remainingTasks || progresso.bugs || progresso.bugs || progresso.improvements){
+        insertProgresso(progresso)
+    }
+    if(dataSprint.date || dataSprint.dias || dataSprint.tasks){
+        insertSprint(dataSprint)
+    }
 
     res.redirect('/burndown');
 });
 
+router.get('/sprint', (req, res) => {
+    var day = new Date();
+    var dateMoment = moment(day).format('YYYY-MM-DD')
+    res.render(
+        'sprint.html',
+        {dateMoment}
+    );
+});
 
+/*router.post('/sprint', (req, res) => {
+    var dataSprint = {nome : 'Sprint 1', date : null, dias : null, tasks : null}
+    dataSprint.date = req.body.initialDate;
+    dataSprint.dias = req.body.dias;
+    dataSprint.tasks = req.body.tasks;
+    res.redirect('/sprint');
+    insertSprint(dataSprint);
+    console.log(dataSprint)
+});*/
 app.use('/', router);
 
 app.listen(8080);

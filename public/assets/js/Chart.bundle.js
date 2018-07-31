@@ -12690,6 +12690,8 @@
                     if (label) {
                         label += ': ';
                     }
+                    
+
                     label += tooltipItem.yLabel;
                     return label;
                 },
@@ -17026,8 +17028,9 @@
                     this.ticks.reverse();
                 }
             },
+            //Generates the label for the chart not changing the chart itself
             getLabelForIndex: function(index, datasetIndex) {
-                return +this.getRightValue(this.chart.data.datasets[datasetIndex].data[index]);
+                return +this.getRightValue((this.chart.data.datasets[datasetIndex].data[index])>>0);
             },
             // Utils
             getPixelForValue: function(value) {

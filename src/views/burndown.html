@@ -1,5 +1,5 @@
-{% set burndown = "active" %} {% extends "./layout/main.html" %} {% block content %}
-
+{% extends "./layout/main.html" %} {% block content %}
+<title>Burndown</title>
 <script src="/static/assets/js/Chart.bundle.js"></script>
 <script src="/static/assets/js/utils.js"></script>
 
@@ -11,34 +11,59 @@
     }
 </style>
 <body>
-    <div class='container'>
-        <div style="width:90%;">
+    {% include "modal.html" %}
+    <div class="container-fluid" style='width: 90%'>
+    <div class="container-fluid d-flex justify-content-center">
+        <div class="w-100 p-3">
             <canvas id="canvas"></canvas>
         </div>
-
+        </div>
         <br>
         <form action="" method="POST">
             <div class='input-group'>
                 <div class='container-fluid'>
-                    <div class='row'>
-                        <div class="col-md-12 col-md-5 col-lg-3">
-                            <label for='date'>Data</label>
-                            <input class='form-control' id='date' name='date' type='date'>
-                            <label for='remaining'>Remaining</label>
-                            <input class="form-control" id='remaining' name='remaining' type='number' placeholder='Remaining tasks'>
-                            <label for='bugs'>Bugs</label>
-                            <input class="form-control" id='bugs' name='bugs' type='number' placeholder='Bugs'>
-                            <label for='extra'>Extra</label>
-                            <input class="form-control" id='extra' name='extra' type='number' placeholder='Extra tasks'>
-                            <label for='improvements'>Improvements</label>
-                            <input class="form-control" id='improvements' name='improvements' type='number' placeholder='Improvements'>
-                            <button class="form-control" id='submit'>Enviar</button>
+                    <div>
+                        <div class="form-group row d-flex justify-content-center">
+                            <label for='date' class="col-sm-2 col-form-label">Date</label>
+                            <div class='col-sm-2'>
+                                <input class="form-control" id='date' name='date' type='date' required>
+                            </div>
                         </div>
+                        <div class="form-group row d-flex justify-content-center">
+                            <label for='remaining' class="col-sm-2 col-form-label">Remaining</label>
+                            <div class='col-sm-2'>
+                                <input class="form-control" id='remaining' name='remaining' type='number' placeholder='Remaining tasks' required>
+                            </div>
+                        </div>
+                        <div class="form-group row d-flex justify-content-center">
+                            <label for='bugs' class="col-sm-2 col-form-label">Bugs</label>
+                            <div class='col-sm-2'>
+                                <input class="form-control" id='bugs' name='bugs' type='number' placeholder='Bugs' required>
+                            </div>
+                        </div>
+                        <div class="form-group row d-flex justify-content-center">
+                            <label for='extra' class="col-sm-2 col-form-label">Extra</label>
+                            <div class='col-sm-2'>
+                                <input class="form-control" id='extra' name='extra' type='number' placeholder='Extra tasks' required>
+                            </div>
+                        </div>
+                        <div class="form-group row d-flex justify-content-center">
+                            <label for='improvements' class="col-sm-2 col-form-label">Improvements</label>
+                            <div class='col-sm-2'>
+                                <input class="form-control" id='improvements' name='improvements' type='number' placeholder='Improvements' required>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <button class="btn btn-primary mb-2" id='submit'>Enviar</button>
+                        </div>
+                    </div>
                     </div>
                 </div>
             </div>
         </form>
-    </div>
+    
+</div>
+
     <script>        
         var DAYS = [];
         var DATAS = [];
@@ -70,12 +95,9 @@
             month: '2-digit',
         })
 
-        var now = (day.getFullYear() + '-' + month + '-' + day.getDate());
-
-        document.getElementById('date').setAttribute('value', now);
+        document.getElementById('date').setAttribute('value', '{{dateMoment}}');
         var i = 0
         {% for item in datas %}
-            console.log('{{item}}')
             DATAS.push('{{item}}');
             DAYS[i] = DATAS[i];
             i = i+1
@@ -155,7 +177,7 @@
             window.myLine = new Chart(ctx, config);
         };
         
-        document.getElementById('submit').addEventListener('click', function () {
+        /*document.getElementById('submit').addEventListener('click', function () {
             var remaining = document.getElementById('remaining');
             var bugs = document.getElementById('bugs');
             var extra = document.getElementById('extra');
@@ -167,6 +189,7 @@
 
             window.myLine.update();
         });
+        */
         
     </script>
 </body>
