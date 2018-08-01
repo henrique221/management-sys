@@ -6641,7 +6641,7 @@
     
                 rectangle._model = {
                     datasetLabel: dataset.label,
-                    label: chart.data.labels[index],
+                    label: chart.data.date[index],
                     borderSkipped: custom.borderSkipped ? custom.borderSkipped : rectangleOptions.borderSkipped,
                     backgroundColor: custom.backgroundColor ? custom.backgroundColor : helpers.valueAtIndexOrDefault(dataset.backgroundColor, index, rectangleOptions.backgroundColor),
                     borderColor: custom.borderColor ? custom.borderColor : helpers.valueAtIndexOrDefault(dataset.borderColor, index, rectangleOptions.borderColor),
@@ -7327,7 +7327,7 @@
                         circumference: circumference,
                         outerRadius: outerRadius,
                         innerRadius: innerRadius,
-                        label: valueAtIndexOrDefault(dataset.label, index, chart.data.labels[index])
+                        label: valueAtIndexOrDefault(dataset.label, index, chart.data.date[index])
                     }
                 });
     
@@ -7885,6 +7885,7 @@
                 var animationOpts = opts.animation;
                 var scale = chart.scale;
                 var labels = chart.data.labels;
+                var date = chart.data.date;
     
                 var circumference = me.calculateCircumference(dataset.data[index]);
                 var centerX = scale.xCenter;
@@ -17663,7 +17664,7 @@
     
         function getValueCount(scale) {
             var opts = scale.options;
-            return opts.angleLines.display || opts.pointLabels.display ? scale.chart.data.labels.length : 0;
+            return opts.angleLines.display || opts.pointLabels.display ? scale.chart.data.date.length : 0;
         }
     
         function getPointLabelFontOptions(scale) {
@@ -17975,7 +17976,7 @@
                 Chart.LinearScaleBase.prototype.convertTicksToLabels.call(me);
     
                 // Point labels
-                me.pointLabels = me.chart.data.labels.map(me.options.pointLabels.callback, me);
+                me.pointLabels = me.chart.data.date.map(me.options.pointLabels.callback, me);
             },
             getLabelForIndex: function(index, datasetIndex) {
                 return +this.getRightValue(this.chart.data.datasets[datasetIndex].data[index]);
@@ -18670,8 +18671,8 @@
                 var i, j, ilen, jlen, data, timestamp;
     
                 // Convert labels to timestamps
-                for (i = 0, ilen = chart.data.labels.length; i < ilen; ++i) {
-                    labels.push(parse(chart.data.labels[i], me));
+                for (i = 0, ilen = chart.data.date.length; i < ilen; ++i) {
+                    labels.push(parse(chart.data.date[i], me));
                 }
     
                 // Convert data to timestamps
