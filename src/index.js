@@ -30,80 +30,24 @@ router.get('/home', (req, res) => {
 });
 
 router.get('/burndown', (req, res) => {
-    
+
     selectProgresso(function (err, content) {
         if (err) {
             console.log(err)
         } else {
             var totalTasks = 35;
             var dayAmount = 11;
-            var divide = totalTasks/dayAmount
-            var ideal = [35, 0]
-            var idealInt = []
             var title = 'New Sprint'
             var now = new Date();
             var dateMoment = moment(now).format('YYYY-MM-DD')
-            // for(let count = 0; count <= dayAmount; count ++){
-            //     if(totalTasks >= 0){
-            //         ideal.push(totalTasks);
-            //         idealInt.push((ideal[count])>>0)
-            //         totalTasks = totalTasks - divide
-            //     }
-            // }
             var items = {}
-
-            var DAYS = [];
-            var DATAS = [];
-            var day = new Date();
-
-            var config = {
-                labels: DAYS,
-                datasets: [{
-                    label: 'Remaining tasks',
-                    fill: false,
-                    // backgroundColor: window.chartColors.blue,
-                    // borderColor: window.chartColors.blue,
-                    data: [],
-                    date: [DATAS]
-                }, {
-                    label: 'bugs',
-                    fill: false,
-                    // backgroundColor: window.chartColors.red,
-                    // borderColor: window.chartColors.red,
-                    data: [],
-                    date: [DATAS]
-                }, {
-                    label: 'extra',
-                    fill: false,
-                    // backgroundColor: window.chartColors.yellow,
-                    // borderColor: window.chartColors.yellow,
-                    data: [],
-                    date: [DATAS]
-                }, {
-                    label: `improvements`,
-                    fill: false,
-                    // backgroundColor: window.chartColors.green,
-                    // borderColor: window.chartColors.green,
-                    data: [],
-                    date: [DATAS]
-                }, {
-                    label: `ideal`,
-                    fill: false,
-                    // backgroundColor: window.chartColors.black,
-                    // borderColor: window.chartColors.black,
-                    data: [],
-                    date: [DATAS]
-                }
-            ]
-            }
-
             for (const item of content) {
                 var date = moment(item.data)
                 items[date.format("DD-MM-YYYY")] = item
             }
-            var firstDate = moment([2018, 6, 29]);
+            var singleDay = moment([2018, 6, 15]);
             var datas = []
-            var dayCount = firstDate
+            var dayCount = singleDay
             for(let day = 0; datas.length <= dayAmount; day ++){
                 if(business.isWeekDay(dayCount)){
                     datas.push(dayCount.format('DD/MM ddd'))
@@ -112,10 +56,9 @@ router.get('/burndown', (req, res) => {
                     business.addWeekDays(dayCount, 1)
                 }
             }
-            
             res.render(
                 'burndown.html',
-                { items , date, datas, ideal , title, dateMoment, config} 
+                {items , date, datas , title, dateMoment, totalTasks, dayAmount}
             )
         }
     })
@@ -144,7 +87,7 @@ router.post('/burndown', (req, res) => {
     if(dataSprint.dias || dataSprint.tasks){
         insertSprint(dataSprint)
     }
-    
+
     if(!req.body){
         console.log('nothing to submit')
     };
