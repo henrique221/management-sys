@@ -1,22 +1,22 @@
 var mysql = require('mysql');
 
-var config = {
-  host: 'db',
-  user: 'root',
-  database: 'burndown',
-  password: 'password',
+var config =  {
+  host     : 'db',
+  user     : 'root',
+  database : 'burndown',
+  password : 'password',
 };
 
 var connection = connect();
 
 function connect() {
   var connection = mysql.createConnection(config);
-  connection.connect(function (err) {
-    if (err) {
-      console.info('Error connecting ' + err);
+  connection.connect(function(err) {
+    if(err){
+      console.info('Error connecting ' +err);
       errorHandler(err);
-    } else {
-      console.info('MySql connected to ' + connection.config.host + ':' + connection.config.port);
+    }else{
+      console.info('MySql connected to ' + connection.config.host + ':' + connection.config.port);  
     }
   });
   connection.on('error', errorHandler);
@@ -26,19 +26,19 @@ function connect() {
 function errorHandler(err) {
   console.info('MySQL error ' + err);
   if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-    console.info('MySQL connection lost. Reconnecting.');
-    connection = connect();
-  } else if (err.code === 'ECONNREFUSED') {
-    console.info('MySQL connection refused. Trying again in 3 seconds.');
-    setTimeout(function () {
+      console.info('MySQL connection lost. Reconnecting.');
       connection = connect();
-    }, 3000);
+  } else if (err.code === 'ECONNREFUSED') {
+      console.info('MySQL connection refused. Trying again in 3 seconds.');
+      setTimeout(function() {
+          connection = connect();
+      }, 3000);
   }
-}
+} 
 
 function query() {
   var start = Date.now();
-  return connection.query.apply(connection, arguments);
+  return connection.query.apply(connection,arguments);
 }
 
 function close() {
@@ -80,23 +80,26 @@ function insertProgresso(progresso) {
   );
 }
 
-function selectProgresso(idSprint, callback) {
-  connection.query(`SELECT * FROM progresso where id_sprint = ${idSprint}`, function (err, rows) {
+function selectProgresso(callback) {
+  connection.query(`SELECT * FROM progresso`, function (err, rows) {
     if (err) {
       console.error('error connecting: ' + err.stack);
       return;
     } else
-      callback(null, rows);
-  });
+    callback(null, rows);
+  }
+);
 }
 
-function selectProgressoSprint(callback) {
-  connection.query(`SELECT * FROM progresso INNER JOIN sprint on progresso.id_sprint = sprint.id`, function (err, rows) {
+function selectProgressoSprint(id, callback) {
+  connection.query(`SELECT * FROM progresso INNER JOIN sprint on progresso.id_sprint = sprint.id where sprint.id = ${id}`, function (err, rows) {
     if (err) {
-      callback(null, rows);
+      console.error('error connecting: ' + err.stack);
+      return log(`Query failed`, err, query);
     } else
-      callback(null, rows);
-  });
+    callback(null, rows);
+    }
+  );
 }
 
 function insertSprint(sprint) {
@@ -116,14 +119,14 @@ function insertSprint(sprint) {
   );
 }
 
-function selectSprint(id, callback) {
-  connection.query(`SELECT * FROM sprint WHERE id = ${id}`, function (err, rows) {
+function selectSprint(callback) {
+  connection.query(`SELECT * FROM sprint`, function(err, rows){
     if (err) {
       callback(null, rows);
-    } else
+    } else 
       callback(null, rows);
   })
-}
+} 
 
 
 module.exports.insertSprint = insertSprint;
