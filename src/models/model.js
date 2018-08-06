@@ -53,10 +53,12 @@ function insertSprint(sprint) {
       '${sprint.startDate}',
       '${sprint.endDate}',
       '${sprint.totalTasks}'
-      )`,
+      );
+      // INSERT INTO progresso 
+      // (id_sprint, remaining_tasks) 
+      // VALUES (sprint.id, ${sprint.totalTasks}`,
     function (err, fields) {
       if (err) throw err;
-
     }
   );
 }
