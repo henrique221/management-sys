@@ -1,15 +1,52 @@
 var mysql = require('mysql');
 
-var con = mysql.createConnection({
-  host: "db",
-  user: "root",
-  database: "burndown",
-  password: "password"
-});
-con.connect()
+var config = {
+  host: 'db',
+  user: 'root',
+  database: 'burndown',
+  password: 'password',
+};
+
+var connection = connect();
+
+function connect() {
+  var connection = mysql.createConnection(config);
+  connection.connect(function (err) {
+    if (err) {
+      console.info('Error connecting ' + err);
+      errorHandler(err);
+    } else {
+      console.info('MySql connected to ' + connection.config.host + ':' + connection.config.port);
+    }
+  });
+  connection.on('error', errorHandler);
+  return connection;
+}
+
+function errorHandler(err) {
+  console.info('MySQL error ' + err);
+  if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+    console.info('MySQL connection lost. Reconnecting.');
+    connection = connect();
+  } else if (err.code === 'ECONNREFUSED') {
+    console.info('MySQL connection refused. Trying again in 3 seconds.');
+    setTimeout(function () {
+      connection = connect();
+    }, 3000);
+  }
+}
+
+function query() {
+  var start = Date.now();
+  return connection.query.apply(connection, arguments);
+}
+
+function close() {
+  connection.end();
+}
 
 function insertSprint(sprint) {
-  con.query(`
+  connection.query(`
       INSERT INTO sprint 
       (nome, start_date, end_date, total_tasks)
       VALUES ('${sprint.nome}',
@@ -25,7 +62,7 @@ function insertSprint(sprint) {
 }
 
 function insertProgresso(progresso) {
-  con.query(`
+  connection.query(`
       INSERT INTO progresso 
       (id_sprint, data, remaining_tasks, bugs, improvements, extra_tasks) 
       VALUES (
@@ -34,7 +71,7 @@ function insertProgresso(progresso) {
         ${progresso.remainingTasks}, 
         ${progresso.bugs}, 
         ${progresso.improvements}, 
-        ${progresso.extraTasks}
+        ${progresso.extra}
       )`,
     function (err, rows) {
       if (err) throw err;
@@ -43,24 +80,33 @@ function insertProgresso(progresso) {
   );
 }
 
-function selectProgresso(callback) {
-  con.query(`SELECT * FROM progresso`, function (err, rows) {
-      if (err) {
-        callback(err, null)
-      } else
-        callback(null, rows);
-    }
-  );
+function selectProgresso(idSprint, callback) {
+  connection.query(`SELECT * FROM progresso where id_sprint = ${idSprint}`, function (err, rows) {
+    if (err) {
+      console.error('error connecting: ' + err.stack);
+      return;
+    } else
+      callback(null, rows);
+  });
+}
+
+function selectProgressoSprint(callback) {
+  connection.query(`SELECT * FROM progresso INNER JOIN sprint on progresso.id_sprint = sprint.id`, function (err, rows) {
+    if (err) {
+      callback(null, rows);
+    } else
+      callback(null, rows);
+  });
 }
 
 function insertSprint(sprint) {
-  con.query(`
+  connection.query(`
       INSERT INTO sprint 
-      (nome, start_date, days, total_tasks) 
+      (nome, start_date, end_date, total_tasks) 
       VALUES (
         '${sprint.nome}', 
         '${sprint.date}', 
-        ${sprint.dias},
+        '${sprint.endDate}',
         ${sprint.tasks}
       )`,
     function (err, rows) {
@@ -70,11 +116,11 @@ function insertSprint(sprint) {
   );
 }
 
-function selectSprint(callback) {
-  con.query(`SELECT * FROM sprint`, function(err, rows){
+function selectSprint(id, callback) {
+  connection.query(`SELECT * FROM sprint WHERE id = ${id}`, function (err, rows) {
     if (err) {
       callback(null, rows);
-    } else 
+    } else
       callback(null, rows);
   })
 }
@@ -85,3 +131,4 @@ module.exports.insertProgresso = insertProgresso;
 module.exports.selectProgresso = selectProgresso;
 module.exports.selectSprint = selectSprint;
 module.exports.insertSprint = insertSprint;
+module.exports.selectProgressoSprint = selectProgressoSprint;

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark" style="color:#999">
+<!-- <nav class="navbar navbar-expand-sm navbar-dark bg-dark" style="color:#999">
     <span style="font-size:20px;cursor:pointer;color:#f1f1f1;padding-right:12px" onclick="openNav()">&#9776;</span>
     <a class="navbar-brand" href="#">Pyxis</a>
     {% include "load.html" %}
@@ -45,26 +45,26 @@
             }
             
             @media screen and (max-height: 450px) {
-              .sidenav {padding-top: 15px;}
-              .sidenav a {font-size: 18px;}
+                .sidenav {padding-top: 15px;}
+                .sidenav a {font-size: 18px;}
             }
-            </style>
-            </head>
-            <body>
-            
-            <div id="mySidenav" class="sidenav">
-              <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-              <a class="nav-link" href="home">Home
-                    <span class="sr-only"></span>
-                </a>
-              <li class="nav-item {{ burndown }}">
-                    <a class="nav-link" href="burndown">Burndown</a>
-                </li>
-              <a href="sprint">Criar nova sprint</a>
-            </div>
-
-            
-            <script>
+        </style>
+    </head>
+    <body>
+        
+        <div id="mySidenav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a class="nav-link" href="home">Home
+                <span class="sr-only"></span>
+            </a>
+            <li class="nav-item {{ burndown }}">
+                <a class="nav-link" href="burndown">Burndown</a>
+            </li>
+            <a href="sprint">Criar nova sprint</a>
+        </div>
+        
+        
+        <script>
             function openNav() {
                 document.getElementById("mySidenav").style.width = "400px";
             }
@@ -72,6 +72,180 @@
             function closeNav() {
                 document.getElementById("mySidenav").style.width = "0";
             }
-            </script>
+        </script>
     </div>
+</nav> -->
+
+
+
+<!--Navbar-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+
+    <!-- Collapse button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent2"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent2">
+
+        <!-- Links -->
+        <ul class="navbar-nav mr-auto">
+            <!-- Dropdown -->
+            <li class="nav-item dropdown mega-dropdown active">
+                <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Menu </a>
+                <div class="dropdown-menu mega-menu row z-depth-1 primary-color-dark" aria-labelledby="navbarDropdownMenuLink2">
+                    <div class="row">
+                        <div class="col-md-5 col-xl-3 sub-menu mt-5 mb-5">
+                            <ol class="list-unstyled ml-4 mr-md-0 mr-4">
+                                <li class="sub-title text-uppercase mt-sm">
+                                    <a class="menu-item-2 white-text" href="sprint">Sprint</a>
+                                </li>
+                                <li class="sub-title text-uppercase">
+                                    <a class="menu-item-2" href="burndown">Burndown</a>
+                                </li>
+                            </ol>
+                        </div>
+                        <div class="col-md-7 col-xl-9">
+                            <div class="row pr-4">
+                                <div class="col-xl-4 mt-5 mb-4 clearfix d-none d-md-block">
+                                    <!--Featured image-->
+                                    <div class="view overlay mb-3 z-depth-1">
+                                        <img src="https://mdbootstrap.com/img/Photos/Horizontal/Work/6-col/img%20(41).jpg" class="img-fluid" alt="First sample image">
+                                        <div class="mask rgba-white-slight flex-center">
+                                            <p></p>
+                                        </div>
+                                    </div>
+                                    <h4 class="mb-2 news-title-2 white-text" href="">Sprint management system.</h4>
+                                    <p class="font-small text-uppercase white-text">
+                                        <i class="fa fa-clock-o pr-2" aria-hidden="true"></i>July 17, 2017 /
+                                        <i class="fa fa-comments-o px-1" aria-hidden="true"></i> 20</p>
+                                </div>
+                                <div class="col-xl-4 mt-5 mb-4 clearfix d-none d-xl-block">
+                                    <!--Featured image-->
+                                    <div class="view overlay mb-3 z-depth-1">
+                                        <img src="https://mdbootstrap.com/img/Photos/Horizontal/Work/6-col/img%20(43).jpg" class="img-fluid" alt="First sample image">
+                                        <div class="mask rgba-white-slight flex-center">
+                                            <p></p>
+                                        </div>
+                                    </div>
+                                    <h4 class="mb-2">
+                                        <a class="news-title-2" href="">Neque porro quisquam est.</a>
+                                    </h4>
+                                    <p class="font-small text-uppercase white-text">
+                                        <i class="fa fa-clock-o pr-2" aria-hidden="true"></i>July 16, 2017 /
+                                        <i class="fa fa-comments-o px-1" aria-hidden="true"></i> 46</p>
+                                </div>
+                                <div class="col-xl-4 mt-5 mb-4 clearfix d-none d-xl-block">
+                                    <!--Featured image-->
+                                    <div class="view overlay mb-3 z-depth-1">
+                                        <img src="https://mdbootstrap.com/img/Photos/Horizontal/Work/6-col/img%20(9).jpg" class="img-fluid" alt="First sample image">
+                                        <div class="mask rgba-white-slight flex-center">
+                                            <p></p>
+                                        </div>
+                                    </div>
+                                    <h4 class="mb-2">
+                                        <a class="news-title-2" href="">Quis autem vel iure reprehit.</a>
+                                    </h4>
+                                    <p class="font-small text-uppercase white-text">
+                                        <i class="fa fa-clock-o pr-2" aria-hidden="true"></i>July 15, 2017 /
+                                        <i class="fa fa-comments-o px-1" aria-hidden="true"></i> 35</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <!-- Links -->
+
+        <!-- Search form -->
+        <form class="form-inline">
+            <div class="md-form my-0">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+            </div>
+        </form>
+        <!-- Links -->
+
+    </div>
+    <!-- Collapsible content -->
+
 </nav>
+<!--/.Navbar-->
+
+<style>
+        .navbar .mega-dropdown {
+            position: static !important;
+        }
+    
+        .navbar .dropdown-menu.mega-menu {
+            width: 100%;
+            border: none;
+            border-radius: 0;
+        }
+    
+        .navbar .dropdown-menu.mega-menu a {
+            padding: 0 0 0 0;
+        }
+    
+        .navbar .dropdown-menu.mega-menu a.news-title {
+            font-weight: 500;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            -webkit-transition: .2s;
+            transition: .2s;
+            color: #4f4f4f !important;
+        }
+    
+        .navbar .dropdown-menu.mega-menu a.news-title:hover {
+            color: #2196f3 !important;
+        }
+    
+        .navbar .dropdown-menu.mega-menu a.news-title.smaller {
+            font-weight: 400;
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+    
+        .navbar .dropdown-menu.mega-menu .sub-menu a.menu-item {
+            color: #4f4f4f !important;
+        }
+    
+        .navbar .dropdown-menu.mega-menu .sub-menu a.menu-item:hover {
+            color: #4f4f4f !important;
+        }
+    
+        .navbar .dropdown-menu.mega-menu .news-single {
+            margin-bottom: 1.2rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+    
+        .navbar .dropdown-menu.mega-menu .sub-title {
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+    
+        .navbar .dropdown-menu.mega-menu .p-sm {
+            padding-bottom: 17px;
+        }
+    
+        .navbar .dropdown-menu.mega-menu .m-sm {
+            margin-bottom: -5px;
+            font-size: 0.85rem;
+            color: #2196f3 !important;
+        }
+    
+        .navbar .dropdown-menu.mega-menu .m-sm:hover {
+            color: #2196f3 !important;
+        }
+    
+        .navbar .dropdown-menu.mega-menu .mt-sm {
+            margin-top: -3px;
+        }
+    
+        .navbar .dropdown-menu.mega-menu .font-small {
+            font-size: 0.85rem;
+        }
+    </style>

@@ -13,9 +13,17 @@ const fs = require('fs')
 
 
 
-const { insertSprint, insertProgresso, selectProgresso, selectSprint } = require('./models/model')
+const {
+    insertSprint,
+    insertProgresso,
+    selectProgresso,
+    selectProgressoSprint,
+    selectSprint
+} = require('./models/model')
 
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({
+    extended: false
+}))
 
 app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
@@ -24,51 +32,95 @@ app.use('/static', express.static(path.join(__dirname, '../public/')));
 
 router.get('/home', (req, res) => {
     res.render(
-        'index.html',
-        {}
+        'index.html', {}
     );
 });
 
-router.get('/burndown', (req, res) => {
+router.get('/burndown(/:id)?', function (req, res, next) {
+    if (req.params.id == null || req.params.id == 'undefined') {
+        res.redirect('sprint')
+    } else {
+        selectProgressoSprint(function (err, content) {
+            if (err) {
+                next(err)
+                res.status(500)
+            } else {
+                var totalTasks = 35;
+                var dayAmount = 11;
+                var title = 'New Sprint'
+                var now = new Date();
+                var dateMoment = moment(now).format('YYYY-MM-DD')
+                var items = {}
+                var sprints = []
 
-    selectProgresso(function (err, content) {
-        if (err) {
-            console.log(err)
-        } else {
-            var totalTasks = 35;
-            var dayAmount = 11;
-            var title = 'New Sprint'
-            var now = new Date();
-            var dateMoment = moment(now).format('YYYY-MM-DD')
-            var items = {}
-            for (const item of content) {
-                var date = moment(item.data)
-                items[date.format("DD-MM-YYYY")] = item
-            }
-            var singleDay = moment([2018, 6, 15]);
-            var datas = []
-            var dayCount = singleDay
-            for(let day = 0; datas.length <= dayAmount; day ++){
-                if(business.isWeekDay(dayCount)){
-                    datas.push(dayCount.format('DD/MM ddd'))
-                    dayCount = moment(dayCount).add(1, "days")
-                }else{
-                    business.addWeekDays(dayCount, 1)
+                for (var item of content) {
+                    sprints.push({id : item.id, nome : item.nome})
                 }
-            }
-            res.render(
-                'burndown.html',
-                {items , date, datas , title, dateMoment, totalTasks, dayAmount}
-            )
-        }
-    })
+                console.log(sprints)
 
+                for (const item of content) {
+                    var date = moment(item.data)
+                    items[date.format("DD-MM-YYYY")] = item
+                }
+                var singleDay = moment([2018, 6, 15]);
+                var datas = []
+                var dayCount = singleDay
+                for (let day = 0; datas.length <= dayAmount; day++) {
+                    if (business.isWeekDay(dayCount)) {
+                        datas.push(dayCount.format('DD/MM ddd'))
+                        dayCount = moment(dayCount).add(1, "days")
+                    } else {
+                        business.addWeekDays(dayCount, 1)
+                    }
+                }
+                selectSprint(req.params.id, function (err, results) {
+                    if (err) {
+                        next(err)
+                    } else {
+                        var nomeSprint = results[0].nome
+                        console.log(nomeSprint)
+                    }
+
+
+                    res.render(
+                        'burndown.html', {
+                            items,
+                            date,
+                            datas,
+                            title,
+                            dateMoment,
+                            totalTasks,
+                            dayAmount,
+                            nomeSprint,
+                            sprints
+                        }
+                    )
+                })
+            }
+        })
+
+    }
 });
-router.post('/burndown', (req, res) => {
+
+router.post('/burndown/:id', (req, res) => {
     var data = {}
     data.table = []
-    var progresso = {idSprint: 2, date: null, remainingTasks: null, bugs: null, improvements: null, extraTasks: null}
-    var dataSprint = {nome : 'Sprint 1', date : null, dias : null, tasks : null}
+    console.log(req.params.id)
+    var progresso = {
+        idSprint: req.params.id,
+        date: null,
+        remainingTasks: null,
+        bugs: null,
+        improvements: null,
+        extraTasks: null
+    }
+    var dataSprint = {
+        nome: null,
+        date: null,
+        endDate: null,
+        tasks: null
+    }
+
 
     progresso.data = req.body.date;
     progresso.remainingTasks = req.body.remaining;
@@ -77,32 +129,35 @@ router.post('/burndown', (req, res) => {
     progresso.improvements = req.body.improvements
 
     dataSprint.date = req.body.initialDate;
-    dataSprint.dias = req.body.dias;
+    dataSprint.nome = req.body.nome;
+    req.body.dias = moment(dataSprint.date).add(req.body.dias, 'days').format('YYYY-MM-DD')
+    dataSprint.endDate = req.body.dias
     dataSprint.tasks = req.body.tasks;
     console.log(req.body)
-
-    if(progresso.data || progresso.remainingTasks || progresso.bugs || progresso.bugs || progresso.improvements){
+    if (progresso.data || progresso.remainingTasks || progresso.bugs || progresso.bugs || progresso.improvements) {
         insertProgresso(progresso)
     }
-    if(dataSprint.dias || dataSprint.tasks){
+    if (dataSprint.dias || dataSprint.tasks) {
         insertSprint(dataSprint)
     }
 
-    if(!req.body){
+    if (!req.body) {
         console.log('nothing to submit')
     };
 
-    res.redirect('/burndown');
+    res.redirect(`/burndown/${req.params.id}`);
 });
 
 router.get('/sprint', (req, res) => {
     var day = new Date();
     var dateMoment = moment(day).format('YYYY-MM-DD')
     res.render(
-        'sprint.html',
-        {dateMoment}
+        'sprint.html', {
+            dateMoment
+        }
     );
 });
+
 
 app.use('/', router);
 

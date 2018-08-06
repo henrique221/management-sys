@@ -1,26 +1,31 @@
-{% extends "./layout/main.html" %} {% block content %}
+{% extends "./layout/main.html" %} 
+{% block content %}
 <title>Burndown</title>
 <script src="/static/assets/js/Chart.bundle.js"></script>
 <script src="/static/assets/js/utils.js"></script>
 
 <style>
-    canvas {
+    canvas{
         -moz-user-select: none;
         -webkit-user-select: none;
         -ms-user-select: none;
     }
 </style>
+</head>
 <body>
+    <h4 class='pt-5 d-flex justify-content-center'>{{nomeSprint}}</h4>
 
     <div class="container-fluid" style='width: 90%'>
         <div class="container-fluid d-flex justify-content-center">
             <div class="w-100 p-3">
                 <span class="d-flex justify-content-end">
-                    <div style="position:absolute; padding-top: 30px; padding-right: 5px">
+                    <div class="p-1" style="position:absolute;">
                         {% include "modal.html" %}
                     </div>
                 </span>
-                <canvas id="myChart"></canvas>
+                
+                    <canvas id="canvas"></canvas>
+               
             </div>
         </div>
         <br>
@@ -70,109 +75,97 @@
             </div>
         </form>
     </div>
-
     <script>
-        {% include 'chart.js' %}
-        // var config = {
-        //     type: 'line',
-        //     data: {
-        //         labels: DAYS,
-        //         datasets: [{
-        //             label: 'Remaining tasks',
-        //             fill: false,
-        //             backgroundColor: window.chartColors.blue,
-        //             borderColor: window.chartColors.blue,
-        //             data: dbRemaining,
-        //             date: [DATAS]
-        //         }, {
-        //             label: 'Bugs',
-        //             fill: false,
-        //             backgroundColor: window.chartColors.red,
-        //             borderColor: window.chartColors.red,
-        //             data: dbBugs,
-        //             date: [DATAS]
-        //         }, {
-        //             label: 'Extra',
-        //             fill: false,
-        //             backgroundColor: window.chartColors.yellow,
-        //             borderColor: window.chartColors.yellow,
-        //             data: dbExtras,
-        //             date: [DATAS]
-        //         }, {
-        //             label: `Improvements`,
-        //             fill: false,
-        //             backgroundColor: window.chartColors.green,
-        //             borderColor: window.chartColors.green,
-        //             data: dbImprovements,
-        //             date: [DATAS]
-        //         }, {
-        //             label: `Ideal`,
-        //             fill: false,
-        //             backgroundColor: window.chartColors.black,
-        //             borderColor: window.chartColors.black,
-        //             data: data_set,
-        //             date: [DATAS]
-        //         }
-        //     ]
-        //     },
-        //     options: {
-        //         responsive: true,
-        //         title: {
-        //             display: true,
-        //             text: 'Burndown'
-        //         },
-        //         tooltips: {
-        //             mode: 'index',
-        //             intersect: false,
-        //         },
-        //         hover: {
-        //             mode: 'nearest',
-        //             intersect: true
-        //         },
-        //         scales: {
-        //             xAxes: [{
-        //                 display: true,
-        //                 type: 'linear',
-        //                 position: 'bottom',
-        //                 scaleLabel: {
-        //                     display: true,
-        //                     labelString: day.getDate() + '/' + day.getMonth() + '/' + day.getFullYear()
-        //                 }
-        //             }],
-        //             yAxes: [{
-        //                 display: true,
-        //                 scaleLabel: {
-        //                     display: true,
-        //                     labelString: 'Tasks'
-        //                 }
-        //             }]
-        //         }
-        //     }
-        // };
-        // var conf;
-        // {% set conf = config.data.labels %}
-
-
-        // window.onload = function () {
-        //     var ctx = document.getElementById('canvas').getContext('2d');
-        //     window.myLine = new Chart(ctx, config);
-        // };
-
-        /*document.getElementById('submit').addEventListener('click', function () {
-            var remaining = document.getElementById('remaining');
-            var bugs = document.getElementById('bugs');
-            var extra = document.getElementById('extra');
-            var improvements = document.getElementById('improvements');
-            config.data.datasets[0].data.push(remaining.value);
-            config.data.datasets[1].data.push(bugs.value);
-            config.data.datasets[2].data.push(extra.value);
-            config.data.datasets[3].data.push(improvements.value);
-
-            window.myLine.update();
-        });
-        */
+        
+        var DAYS = [];
+        var DATAS = [];
+        var day = new Date();
+        
+        
+        var dbBugs = []
+        var dbRemaining = []
+        var dbImprovements = []
+        var dbExtras = []
+        
+        {% for dado in items %}
+        dbRemaining.push({{ dado.remaining_tasks }})
+        dbBugs.push({{ dado.bugs }})
+        dbImprovements.push({{ dado.improvements }})
+        dbExtras.push({{ dado.extra_tasks }})
+        {% endfor %}
+        
+        
+        let month = day.toLocaleDateString('pt-br', {
+            month: '2-digit',
+        })
+        
+        document.getElementById('date').setAttribute('value', '{{dateMoment}}');
+        var i = 0
+        {% for item in datas %}
+        DATAS.push('{{item}}');
+        DAYS[i] = DATAS[i];
+        i = i+1
+        {%endfor%}
+        {% for item in config.datasets.label %}
+        c.push({{item.label}})
+        i=i++
+        {% endfor %}
+        
+        var datapoints = [0, 170];
+        var config = {
+			type: 'line',
+			data: {
+				labels: DATAS,
+				datasets: [{
+					label: 'Linear interpolation',
+					data: dbRemaining,
+					borderColor: window.chartColors.green,
+					backgroundColor: 'rgba(0, 0, 0, 0)',
+					fill: false,
+					lineTension: 0
+				}]
+			},
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Line Chart - Cubic interpolation mode'
+				},
+				tooltips: {
+					mode: 'index'
+				},
+				scales: {
+					xAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true
+						}
+					}],
+					yAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Value'
+						},
+						ticks: {
+							suggestedMin: -10,
+							suggestedMax: 200,
+						}
+					}]
+				}
+			}
+		};
+		window.onload = function() {
+			var ctx = document.getElementById('canvas').getContext('2d');
+			window.myLine = new Chart(ctx, config);
+		};
 
     </script>
-
 </body>
+{% for item in sprints %}
+    <a href='{{item.id}}'>{{item.nome}}</a>
+{% endfor %}
+
+{% include "layout/footer.html" %}
 {% endblock %}
+
