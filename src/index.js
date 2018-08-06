@@ -18,7 +18,8 @@ const {
     insertProgresso,
     selectProgresso,
     selectProgressoSprint,
-    selectSprint
+    selectSprint,
+    selectSprintName
 } = require('./models/model')
 
 app.use(bodyParser.urlencoded({
@@ -93,7 +94,7 @@ router.get('/burndown(/:id)?', function (req, res, next) {
                         )
                     })
                 } catch {
-                    res.redirect('/sprint')
+                    res.redirect(`/progresso/${req.params.id}`)
                 }
             }
 
@@ -120,8 +121,6 @@ router.post('/burndown/:id', (req, res) => {
         endDate: null,
         tasks: null
     }
-
-
     progresso.data = req.body.date;
     progresso.remainingTasks = req.body.remaining;
     progresso.bugs = req.body.bugs;
@@ -149,14 +148,23 @@ router.post('/burndown/:id', (req, res) => {
 });
 
 router.get('/sprint', (req, res) => {
+    selectSprint(function(err, content){
+        if (err){
+            next(err)
+        }else{
+
+
     var day = new Date();
     var dateMoment = moment(day).format('YYYY-MM-DD')
+    console.log(content)
     res.render(
         'sprint.html', {
-            dateMoment
+            dateMoment,
+            content
         }
     );
-});
+}})
+})
 router.post('/sprint', (req, res) => {
     var dataSprint = {
         nome: null,
@@ -166,7 +174,6 @@ router.post('/sprint', (req, res) => {
     }
     dataSprint.date = req.body.initialDate;
     dataSprint.nome = req.body.nome;
-    req.body.dias = moment(dataSprint.date).add(req.body.dias, 'days').format('YYYY-MM-DD')
     dataSprint.endDate = req.body.dias
     dataSprint.tasks = req.body.tasks;
     console.log(req.body)
@@ -175,6 +182,38 @@ router.post('/sprint', (req, res) => {
     }
     res.redirect('/sprint')
 });
+
+router.get('/progresso(/:id)?', (req, res) => {
+    var now = new Date();
+    var dateMoment = moment(now).format('YYYY-MM-DD')
+
+    selectSprintName(req.params.id, function (err, results){
+        if (err) {
+            next(err)
+        } else {
+            var results = results
+        }
+    res.render(
+        'progresso.html',
+        {results, dateMoment}
+    );
+})
+})
+
+router.post('/progresso/:id', (req, res) => {
+    var progresso = {
+        idSprint: req.params.id,
+        date: req.body.date,
+        remainingTasks: req.body.remaining,
+        bugs: req.body.bugs,
+        improvements: req.body.improvements,
+        extra: req.body.extra
+    }
+    insertProgresso(progresso)
+    console.log(progresso)
+    res.redirect(`/burndown/${req.params.id}`)
+})
+
 
 app.use('/', router);
 

@@ -1,0 +1,55 @@
+{% extends "./layout/main.html" %}
+{% block content %}
+<div class='container'>
+    <h4 class='mt-5 d-flex justify-content-center'>{{results[0].nome}}</h4>
+    <p class='mb-5 d-flex justify-content-center'>Criar primeiro progresso</p>
+</div>
+<form action="" method="POST">
+    <div class='input-group'>
+        <div class='container-fluid'>
+            <div class="row d-flex justify-content-center">
+                <span class='col-sm-12 col-md-8' style="flex-direction:column">
+                    <div class="form-group row d-flex justify-content-center">
+                        <label for='date' class="col-sm-2 col-form-label">Date</label>
+                        <div class='col-md-10'>
+                            <input class="form-control" id='date' name='date' type='date' required>
+                        </div>
+                    </div>
+                    <div class="form-group row d-flex justify-content-center">
+                        <label for='remaining' class="col-sm-2 col-form-label">Remaining</label>
+                        <div class='col-md-10'>
+                            <input class="form-control" id='remaining' name='remaining' type='number' placeholder='Remaining tasks' required>
+                        </div>
+                    </div>
+                    <div class="form-group row d-flex justify-content-center">
+                        <label for='bugs' class="col-sm-2 col-form-label">Bugs</label>
+                        <div class='col-md-10'>
+                            <input class="form-control" id='bugs' name='bugs' type='number' placeholder='Bugs' required>
+                        </div>
+                    </div>
+                    <div class="form-group row d-flex justify-content-center">
+                        <label for='extra' class="col-sm-2 col-form-label">Extra</label>
+                        <div class='col-md-10'>
+                            <input class="form-control" id='extra' name='extra' type='number' placeholder='Extra tasks' required>
+                        </div>
+                    </div>
+                    <div class="form-group row d-flex justify-content-center">
+                        <label for='improvements' class="col-sm-2 col-form-label">Improvements</label>
+                        <div class='col-md-10'>
+                            <input class="form-control" id='improvements' name='improvements' type='number' placeholder='Improvements' required>
+                        </div>
+                    </div>
+                    <span class="d-flex justify-content-end">
+                        <button class="btn btn-primary w-100" id='submit'>Save</button>
+                    </span>
+                </span>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+document.getElementById('date').setAttribute('value', '{{dateMoment}}');
+</script>
+{% include "layout/footer.html" %}
+{% endblock %}

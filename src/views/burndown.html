@@ -1,4 +1,4 @@
-{% extends "./layout/main.html" %} 
+{% extends "./layout/main.html" %}
 {% block content %}
 <title>Burndown</title>
 <script src="/static/assets/js/Chart.bundle.js"></script>
@@ -15,18 +15,14 @@
 <body>
     <h4 class='pt-5 d-flex justify-content-center'>{{nomeSprint}}</h4>
 
-    <div class="container-fluid" style='width: 90%'>
-        <div class="container-fluid d-flex justify-content-center">
-            <div class="w-100 p-3">
-                <span class="d-flex justify-content-end">
-                    <div class="p-1" style="position:absolute;">
-                        {% include "modal.html" %}
-                    </div>
-                </span>
-                
-                    <canvas id="canvas"></canvas>
-               
+    <div class="container w-100">
+        <span class="d-flex justify-content-end">
+            <div class="p-1 w-1" style="position:absolute;">
+                {% include "modal.html" %}
             </div>
+        </span>
+        <div class="w-responsive text-center mx-auto p-1">
+            <canvas id="canvas"></canvas>
         </div>
         <br>
         <form action="" method="POST">
@@ -65,40 +61,43 @@
                                 </div>
                             </div>
                             <span class="d-flex justify-content-end">
-                                <div style="position:absolute; padding-top: 1px; padding-bottom: 15px;">
-                                    <button class="btn btn-primary" style="width: 300px" id='submit'>Save</button>
-                                </div>
+                                <button class="btn btn-primary w-100" id='submit'>Save</button>
                             </span>
                         </span>
                     </div>
                 </div>
             </div>
         </form>
+        <div class='mt-2 m-2 d-flex justify-content-center flex-column flex-md-row'>
+            {% for item in results %}
+            <a class='m-2 w-sm-2 flex-fill border border-primary' href='{{item.id}}'>{{item.nome}}</a>
+            {% endfor %}
+        </div>
     </div>
     <script>
-        
+
         var DAYS = [];
         var DATAS = [];
         var day = new Date();
-        
-        
+
+
         var dbBugs = []
         var dbRemaining = []
         var dbImprovements = []
         var dbExtras = []
-        
+
         {% for dado in items %}
         dbRemaining.push({{ dado.remaining_tasks }})
         dbBugs.push({{ dado.bugs }})
         dbImprovements.push({{ dado.improvements }})
         dbExtras.push({{ dado.extra_tasks }})
         {% endfor %}
-        
-        
+
+
         let month = day.toLocaleDateString('pt-br', {
             month: '2-digit',
         })
-        
+
         document.getElementById('date').setAttribute('value', '{{dateMoment}}');
         var i = 0
         {% for item in datas %}
@@ -110,14 +109,14 @@
         c.push({{item.label}})
         i=i++
         {% endfor %}
-        
+
         var datapoints = [0, 170];
         var config = {
 			type: 'line',
 			data: {
 				labels: DATAS,
 				datasets: [{
-					label: 'Linear interpolation',
+					label: 'Remaining',
 					data: dbRemaining,
 					borderColor: window.chartColors.green,
 					backgroundColor: 'rgba(0, 0, 0, 0)',
@@ -129,7 +128,7 @@
 				responsive: true,
 				title: {
 					display: true,
-					text: 'Chart.js Line Chart - Cubic interpolation mode'
+					text: 'Burndown - {{nomeSprint}}'
 				},
 				tooltips: {
 					mode: 'index'
@@ -162,9 +161,6 @@
 
     </script>
 </body>
-{% for item in results %}
-    <a href='{{item.id}}'>{{item.nome}}</a>
-{% endfor %}
 
 {% include "layout/footer.html" %}
 {% endblock %}
