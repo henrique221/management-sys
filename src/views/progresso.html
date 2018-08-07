@@ -1,7 +1,11 @@
 {% extends "./layout/main.html" %}
 {% block content %}
 <div class='container'>
-    <h4 class='mt-5 d-flex justify-content-center'>{{results[0].nome}}</h4>
+    <div class="alert alert-warning" role="alert">
+        {{resp}}
+    </div>
+    <h4 class='mt-5 d-flex justify-content-center'>{{content}}</h4>
+
     <p class='mb-5 d-flex justify-content-center'>Criar primeiro progresso</p>
 </div>
 <form action="" method="POST">
@@ -49,7 +53,7 @@
 </form>
 
 <script>
-document.getElementById('date').setAttribute('value', '{{dateMoment}}');
+    document.getElementById('date').setAttribute('value', '{{dateMoment}}');
 </script>
 {% include "layout/footer.html" %}
 {% endblock %}

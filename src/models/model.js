@@ -112,14 +112,15 @@ function selectSprint(callback) {
 
 function selectSprintName(id, callback) {
   connection.query(`SELECT nome FROM sprint WHERE id = ${id}`, function(err, rows){
-    if(err){
-      callback(null, rows)
+    if (err) {
+      console.error('error connecting: ' + err.stack);
+      return log(`Query failed`, err, query);
     }
     else
     callback(null, rows)
+    var result = callback
   })
 }
-
 
 module.exports.insertSprint = insertSprint;
 module.exports.insertProgresso = insertProgresso;

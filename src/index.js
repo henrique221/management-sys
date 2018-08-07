@@ -19,8 +19,9 @@ const {
     selectProgresso,
     selectProgressoSprint,
     selectSprint,
-    selectSprintName
+    selectSprintName,
 } = require('./models/model')
+
 
 app.use(bodyParser.urlencoded({
     extended: false
@@ -32,14 +33,23 @@ app.set('views', path.join(__dirname, '/views/'));
 app.use('/static', express.static(path.join(__dirname, '../public/')));
 
 router.get('/home', (req, res) => {
-    res.render(
-        'index.html', {}
-    );
-});
+    selectSprint(function (err, results) {
+        if (err) {
+            next(err)
+        } else {
+            var results = results
+        }
+        module.exports.results = selectSprint
+        res.render(
+            'index.html', {results}
+        );
+    })
+})
+
 
 router.get('/burndown(/:id)?', function (req, res, next) {
     if (req.params.id == null || req.params.id == 'undefined') {
-        res.redirect('sprint')
+        res.redirect('home')
     } else {
         selectProgressoSprint(req.params.id, function (err, content) {
             if (err) {
@@ -93,8 +103,8 @@ router.get('/burndown(/:id)?', function (req, res, next) {
                             }
                         )
                     })
-                } catch {
-                    res.redirect(`/progresso/${req.params.id}`)
+                } catch{
+                    res.redirect(`/burndown/progresso/${req.params.id}`)
                 }
             }
 
@@ -147,74 +157,113 @@ router.post('/burndown/:id', (req, res) => {
     res.redirect(`/burndown/${req.params.id}`);
 });
 
-router.get('/sprint', (req, res) => {
+router.get('/sprint(/:id)?', (req, res) => {
     selectSprint(function(err, content){
         if (err){
             next(err)
         }else{
-
-
-    var day = new Date();
-    var dateMoment = moment(day).format('YYYY-MM-DD')
-    console.log(content)
-    res.render(
-        'sprint.html', {
-            dateMoment,
-            content
+            var day = new Date();
+            var dateMoment = moment(day).format('YYYY-MM-DD')
+            var results = content
+            var success;
+            var text;
+            if(req.params.id == 'success'){
+                success = true
+                text = `Sprint succesfully added`
+            }
+            res.render(
+                'sprint.html', {
+                    dateMoment,
+                    results,
+                    success,
+                    text
+                }
+            );
+        }})
+    })
+    router.post('/sprint(/:success)?', (req, res) => {
+        var dataSprint = {
+            nome: null,
+            date: null,
+            endDate: null,
+            tasks: null
         }
-    );
-}})
-})
-router.post('/sprint', (req, res) => {
-    var dataSprint = {
-        nome: null,
-        date: null,
-        endDate: null,
-        tasks: null
-    }
-    dataSprint.date = req.body.initialDate;
-    dataSprint.nome = req.body.nome;
-    dataSprint.endDate = req.body.dias
-    dataSprint.tasks = req.body.tasks;
-    console.log(req.body)
-    if (dataSprint.dias || dataSprint.tasks) {
-        insertSprint(dataSprint)
-    }
-    res.redirect('/sprint')
-});
+        dataSprint.date = req.body.initialDate;
+        dataSprint.nome = req.body.nome;
+        dataSprint.endDate = req.body.dias
+        dataSprint.tasks = req.body.tasks;
+        console.log(req.body)
+        if (dataSprint.dias || dataSprint.tasks) {
+            insertSprint(dataSprint)
+        }
+        res.redirect('/sprint/' + 'success')
+    });
 
-router.get('/progresso(/:id)?', (req, res) => {
-    var now = new Date();
-    var dateMoment = moment(now).format('YYYY-MM-DD')
-
-    selectSprintName(req.params.id, function (err, results){
-        if (err) {
-            next(err)
+    router.get('/progresso/error', (req, res) => {
+        selectSprint(function(err, content){
+            if (err){
+                next(err)
+            }else{
+                var results = content
+                res.render('progresso_error.html' , {results})
+            }
+        })
+    })
+    router.get('/burndown/progresso(/:id)?', (req, res) => {
+        if (req.params.id == null || req.params.id == 'undefined') {
+            res.redirect('home')
         } else {
-            var results = results
+            selectSprintName(req.params.id, function (err, content){
+                if(err){
+                    next(err)
+                }
+                else{
+                    try{
+                        var content = content
+                        var now = new Date();
+                        var dateMoment = moment(now).format('YYYY-MM-DD')
+                        console.log(content[0])
+                        if(content[0].nome){
+                            console.log(content[0].nome)
+                        }
+                        var content = content[0].nome
+                        selectSprint(function (err, results) {
+                            if (err) {
+                                next(err)
+                            } else {
+                                var results = results
+                            }
+                            var resp = `Progress in " ${content} " still not registered`
+                            res.render(
+                                'progresso.html',
+                                {content, dateMoment, results, resp}
+                            )
+
+                        })
+                    }catch{
+                        res.redirect('/progresso/error')
+                    }
+                }
+
+            })
         }
-    res.render(
-        'progresso.html',
-        {results, dateMoment}
-    );
-})
-})
+    })
 
-router.post('/progresso/:id', (req, res) => {
-    var progresso = {
-        idSprint: req.params.id,
-        date: req.body.date,
-        remainingTasks: req.body.remaining,
-        bugs: req.body.bugs,
-        improvements: req.body.improvements,
-        extra: req.body.extra
-    }
-    insertProgresso(progresso)
-    console.log(progresso)
-    res.redirect(`/burndown/${req.params.id}`)
-})
+    router.post('/burndown/progresso(/:id)?', (req, res) => {
+        var progresso = {
+            idSprint: req.params.id,
+            date: req.body.date,
+            remainingTasks: req.body.remaining,
+            bugs: req.body.bugs,
+            improvements: req.body.improvements,
+            extra: req.body.extra
+        }
+        insertProgresso(progresso)
+        console.log(progresso)
+        res.redirect(`/burndown/${req.params.id}`)
+    })
 
 
-app.use('/', router);
+    app.use('/', router);
 
-app.listen(8080);
+    app.listen(8080);

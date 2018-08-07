@@ -68,11 +68,6 @@
                 </div>
             </div>
         </form>
-        <div class='mt-2 m-2 d-flex justify-content-center flex-column flex-md-row'>
-            {% for item in results %}
-            <a class='m-2 w-sm-2 flex-fill border border-primary' href='{{item.id}}'>{{item.nome}}</a>
-            {% endfor %}
-        </div>
     </div>
     <script>
 
@@ -161,6 +156,7 @@
 
     </script>
 </body>
+
 
 {% include "layout/footer.html" %}
 {% endblock %}

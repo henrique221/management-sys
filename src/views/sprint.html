@@ -3,12 +3,14 @@
 <script src="/static/assets/js/Chart.bundle.js"></script>
 <script src="/static/assets/js/utils.js"></script>
 
+{% if success == true %}
+{% include 'success.html' %}
+{% endif %}
 <div class='container'>
     <div class='d-flex justify-content-center'>
-        <h3 class='m-5'>Nova sprint</h3>
+        <h3 class='m-5'>New sprint</h3>
     </div>
 </div>
-
 
 <form action="" method="POST">
     <div class='input-group'>
@@ -39,7 +41,7 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-center m-5">
-                    <button class="btn btn-primary" id='submit'>Enviar</button>
+                    <button class="btn btn-primary" id='submit'>Save</button>
                 </div>
             </div>
         </div>
