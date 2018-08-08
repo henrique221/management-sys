@@ -181,7 +181,7 @@ router.get('/sprint(/:id)?', (req, res) => {
             );
         }})
     })
-    router.post('/sprint(/:success)?', (req, res) => {
+    router.post('/sprint/success', (req, res) => {
         var dataSprint = {
             nome: null,
             date: null,
@@ -196,7 +196,7 @@ router.get('/sprint(/:id)?', (req, res) => {
         if (dataSprint.dias || dataSprint.tasks) {
             insertSprint(dataSprint)
         }
-        res.redirect('/sprint/' + 'success')
+        res.send('done')
     });
 
     router.get('/progresso/error', (req, res) => {

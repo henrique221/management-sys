@@ -100,9 +100,9 @@
                                 <li class="sub-title text-uppercase"><a class="menu-item-2" href="/sprint">New Sprint</a></li>
                             </ol>
                         </div>
-                        <div class="col-md-7 col-xl-9">
+                        <div class="col-md-8 col-xl-9">
                             <div class="row pr-4">
-                                <div class="col-xl-4 mt-5 mb-4 clearfix d-none d-md-block">
+                                <div class="col-lg-4 mt-5 mb-4 clearfix d-none d-md-block">
                                     <!--Featured image-->
                                     <div class="view overlay mb-3 z-depth-1">
                                         <img src="https://mdbootstrap.com/img/Photos/Horizontal/Work/6-col/img%20(41).jpg" class="img-fluid" alt="First sample image">
@@ -110,10 +110,10 @@
                                             <p></p>
                                         </div>
                                     </div>
-                                    <h4 class="mb-2"><a class="news-title-2" href="">Lorem ipsum dolor sit amet.</a></h4>
+                                    <h4 class="mb-2"><a class="news-title-2" href="">List of all burndowns</a></h4>
                                     <p class="font-small text-uppercase white-text"><i class="fa fa-clock-o pr-2" aria-hidden="true"></i>July 17, 2017 / <i class="fa fa-comments-o px-1" aria-hidden="true"></i> 20</p>
                                 </div>
-                                <div class="col-xl-4 mt-5 mb-4 clearfix d-none d-xl-block">
+                                <div class="col-lg-4 mt-5 mb-4 clearfix d-none d-xl-block">
                                     <!--Featured image-->
                                     <div class="view overlay mb-3 z-depth-1">
                                         <img src="https://mdbootstrap.com/img/Photos/Horizontal/Work/6-col/img%20(43).jpg" class="img-fluid" alt="First sample image">
@@ -121,19 +121,10 @@
                                             <p></p>
                                         </div>
                                     </div>
-                                    <h4 class="mb-2"><a class="news-title-2" href="">Neque porro quisquam est.</a></h4>
+                                    <h4 class="mb-2"><a class="news-title-2" href="">List of all sprints</a></h4>
                                     <p class="font-small text-uppercase white-text"><i class="fa fa-clock-o pr-2" aria-hidden="true"></i>July 16, 2017 / <i class="fa fa-comments-o px-1" aria-hidden="true"></i> 46</p>
                                 </div>
                                 <div class="col-xl-4 mt-5 mb-4 clearfix d-none d-xl-block">
-                                    <!--Featured image-->
-                                    <div class="view overlay mb-3 z-depth-1">
-                                        <img src="https://mdbootstrap.com/img/Photos/Horizontal/Work/6-col/img%20(9).jpg" class="img-fluid" alt="First sample image">
-                                        <div class="mask rgba-white-slight flex-center">
-                                            <p></p>
-                                        </div>
-                                    </div>
-                                    <h4 class="mb-2"><a class="news-title-2" href="">Quis autem vel iure reprehit.</a></h4>
-                                    <p class="font-small text-uppercase white-text"><i class="fa fa-clock-o pr-2" aria-hidden="true"></i>July 15, 2017 / <i class="fa fa-comments-o px-1" aria-hidden="true"></i> 35</p>
                                 </div>
                             </div>
                         </div>
@@ -148,8 +139,10 @@
             <div class="btn-group">
                 <button class="btn btn-light-blue rounded" style="box-shadow: 0 0 0 " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-area-chart" aria-hidden="true"></i> Sprints</button>
                 <div class="dropdown-menu">
+                    {% set cont = 0 %}
                     {% for item in results %}
-                    <a class='dropdown-item mr-5' href='/burndown/{{item.id}}'>{{item.nome}}</a>
+                    {% set cont = cont+1 %}
+                    <a class='dropdown-item mr-5' href='/burndown/{{item.id}}'>{{cont}} - {{item.nome}}</a>
                     {% endfor %}
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="/sprint">New sprint</a>
