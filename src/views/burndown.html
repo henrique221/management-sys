@@ -13,6 +13,7 @@
 </style>
 </head>
 <body>
+    
     <h4 class='pt-5 d-flex justify-content-center'>{{nomeSprint}}</h4>
 
     <div class="container w-100">
@@ -22,7 +23,7 @@
             </div>
         </span>
         <div class="w-responsive text-center mx-auto p-1">
-            <canvas id="canvas"></canvas>
+            <canvas id="myChart"></canvas>
         </div>
         <br>
         <form action="" method="POST">
@@ -69,93 +70,12 @@
             </div>
         </form>
     </div>
+    
     <script>
-
-        var DAYS = [];
-        var DATAS = [];
-        var day = new Date();
-
-
-        var dbBugs = []
-        var dbRemaining = []
-        var dbImprovements = []
-        var dbExtras = []
-
-        {% for dado in items %}
-        dbRemaining.push({{ dado.remaining_tasks }})
-        dbBugs.push({{ dado.bugs }})
-        dbImprovements.push({{ dado.improvements }})
-        dbExtras.push({{ dado.extra_tasks }})
-        {% endfor %}
-
-
-        let month = day.toLocaleDateString('pt-br', {
-            month: '2-digit',
-        })
-
-        document.getElementById('date').setAttribute('value', '{{dateMoment}}');
-        var i = 0
-        {% for item in datas %}
-        DATAS.push('{{item}}');
-        DAYS[i] = DATAS[i];
-        i = i+1
-        {%endfor%}
-        {% for item in config.datasets.label %}
-        c.push({{item.label}})
-        i=i++
-        {% endfor %}
-
-        var datapoints = [0, 170];
-        var config = {
-			type: 'line',
-			data: {
-				labels: DATAS,
-				datasets: [{
-					label: 'Remaining',
-					data: dbRemaining,
-					borderColor: window.chartColors.green,
-					backgroundColor: 'rgba(0, 0, 0, 0)',
-					fill: false,
-					lineTension: 0
-				}]
-			},
-			options: {
-				responsive: true,
-				title: {
-					display: true,
-					text: 'Burndown - {{nomeSprint}}'
-				},
-				tooltips: {
-					mode: 'index'
-				},
-				scales: {
-					xAxes: [{
-						display: true,
-						scaleLabel: {
-							display: true
-						}
-					}],
-					yAxes: [{
-						display: true,
-						scaleLabel: {
-							display: true,
-							labelString: 'Value'
-						},
-						ticks: {
-							suggestedMin: -10,
-							suggestedMax: 200,
-						}
-					}]
-				}
-			}
-		};
-		window.onload = function() {
-			var ctx = document.getElementById('canvas').getContext('2d');
-			window.myLine = new Chart(ctx, config);
-		};
-
+        {% include 'chart.js' %}
     </script>
 </body>
+
 
 
 
