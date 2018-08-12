@@ -69,7 +69,7 @@ router.get('/burndown(/:id)?', function (req, res, next) {
                             ideal.push(NaN)
                         }                        
                     }
-                    console.log(ideal)
+
                     var title = 'New Sprint'
                     var now = new Date();
                     var dateMoment = moment(now).format('YYYY-MM-DD')
@@ -79,8 +79,12 @@ router.get('/burndown(/:id)?', function (req, res, next) {
                         var date = moment(item.data)
                         items[date.format("DD-MM-YYYY")] = item
                     }
+                    var startDateContent = content[0].start_date
+                    var month = startDateContent.getMonth()
+                    var year = startDateContent.getFullYear()
+                    var day = startDateContent.getDate() 
 
-                    var singleDay = moment([2018, 6, 15]);
+                    var singleDay = moment([year, month, day]);
                     var datas = []
                     var dayCount = singleDay
                     for (let day = 0; datas.length <= dayAmount; day++) {
@@ -140,7 +144,7 @@ router.post('/burndown/:id', (req, res) => {
         endDate: null,
         tasks: null
     }
-    progresso.data = req.body.date;
+    progresso.date = req.body.date;
     progresso.remainingTasks = req.body.remaining;
     progresso.bugs = req.body.bugs;
     progresso.extra = req.body.extra;

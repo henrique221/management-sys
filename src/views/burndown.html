@@ -1,83 +1,41 @@
-{% extends "./layout/main.html" %}
-{% block content %}
+{% extends "./layout/main.html" %} {% block content %}
 <title>Burndown</title>
 <script src="/static/assets/js/Chart.bundle.js"></script>
 <script src="/static/assets/js/utils.js"></script>
 
 <style>
-    canvas{
+    canvas {
         -moz-user-select: none;
         -webkit-user-select: none;
         -ms-user-select: none;
     }
 </style>
 </head>
+
 <body>
     
     <h4 class='pt-5 d-flex justify-content-center'>{{nomeSprint}}</h4>
-
-    <div class="container w-100">
-        <span class="d-flex justify-content-end">
-            <div class="p-1 w-1" style="position:absolute;">
-                {% include "modal.html" %}
-            </div>
-        </span>
-        <div class="w-responsive text-center mx-auto p-1">
-            <canvas id="myChart"></canvas>
-        </div>
-        <br>
-        <form action="" method="POST">
-            <div class='input-group'>
-                <div class='container-fluid'>
-                    <div class="row d-flex justify-content-center">
-                        <span style="width:60%; flex-direction:column">
-                            <div class="form-group row d-flex justify-content-center">
-                                <label for='date' class="col-sm-2 col-form-label">Date</label>
-                                <div class='col-sm-10'>
-                                    <input class="form-control" id='date' name='date' type='date' required>
-                                </div>
-                            </div>
-                            <div class="form-group row d-flex justify-content-center">
-                                <label for='remaining' class="col-sm-2 col-form-label">Remaining</label>
-                                <div class='col-sm-10'>
-                                    <input class="form-control" id='remaining' name='remaining' type='number' placeholder='Remaining tasks' required>
-                                </div>
-                            </div>
-                            <div class="form-group row d-flex justify-content-center">
-                                <label for='bugs' class="col-sm-2 col-form-label">Bugs</label>
-                                <div class='col-sm-10'>
-                                    <input class="form-control" id='bugs' name='bugs' type='number' placeholder='Bugs' required>
-                                </div>
-                            </div>
-                            <div class="form-group row d-flex justify-content-center">
-                                <label for='extra' class="col-sm-2 col-form-label">Extra</label>
-                                <div class='col-sm-10'>
-                                    <input class="form-control" id='extra' name='extra' type='number' placeholder='Extra tasks' required>
-                                </div>
-                            </div>
-                            <div class="form-group row d-flex justify-content-center">
-                                <label for='improvements' class="col-sm-2 col-form-label">Improvements</label>
-                                <div class='col-sm-10'>
-                                    <input class="form-control" id='improvements' name='improvements' type='number' placeholder='Improvements' required>
-                                </div>
-                            </div>
-                            <span class="d-flex justify-content-end">
-                                <button class="btn btn-primary w-100" id='submit'>Save</button>
-                            </span>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
     
+    <div class="container col-12">
+        {% include "modal.html" %}
+        <span class="d-flex justify-content-center">
+            <div class="chart-container col-12" style="">
+                <canvas id="myChart"></canvas>
+            </div>
+        </span>        
+    </div>
+    <div class='d-flex align-items-end' >
+        <div class="d-md-none text-center col-12">
+            <button type="button" class="btn btn-primary col-12" data-toggle="modal" data-target="#modalSubscriptionForm">Add progress
+                <i class="fa fa-area-chart" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+
     <script>
         {% include 'chart.js' %}
     </script>
 </body>
 
 
-
-
 {% endblock %}
-
