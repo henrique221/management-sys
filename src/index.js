@@ -71,7 +71,6 @@ router.get('/burndown(/:id)?', function (req, res, next) {
                             ideal.push(NaN)
                         }
                     }
-
                     var title = 'New Sprint'
                     var now = new Date();
                     var dateMoment = moment(now).format('YYYY-MM-DD')
@@ -105,21 +104,30 @@ router.get('/burndown(/:id)?', function (req, res, next) {
                             var monthRemaining = content[i].data.getMonth()
                             var yearRemaining = content[i].data.getFullYear()
                             dateRemaining.push(moment([yearRemaining, monthRemaining, dayRemaining]).format('DD/MM ddd'))
+                            content[i].data = dateRemaining[i]
                             tasksAndDays.push({
                                 data: dateRemaining[i].data,
                                 tasks: content[i].total_tasks
                             })
+
+
+
                         } else {
                             tasksAndDays.push(NaN)
                         }
                     }
-                    if(datas.includes(dateRemaining[3])){
-                        console.log(dateRemaining[3])
-                        console.log(datas[datas.indexOf(dateRemaining[3])])
-                        console.log(true)
-                    }else{
-                        console.log(false)
+                    var includeDate = []
+                    for(let i = 0; i<datas.length; i++){
+                        includeDate.push(NaN)
                     }
+                    for(let i = 0; i<datas.length; i++){
+                        if(datas.includes(dateRemaining[i])){
+                            includeDate[datas.indexOf(dateRemaining[i])] = datas[datas.indexOf(dateRemaining[i])]
+                            // console.log(dateRemaining[i])
+                            console.log(datas.indexOf(dateRemaining[i]))
+                        }
+                    }
+                    console.log(content[0])
                     selectSprint(function (err, results) {
                         if (err) {
                             next(err)
@@ -137,7 +145,8 @@ router.get('/burndown(/:id)?', function (req, res, next) {
                                 dayAmount,
                                 nomeSprint,
                                 results,
-                                ideal
+                                ideal,
+                                includeDate
                             }
                         )
                     })
@@ -154,7 +163,6 @@ router.get('/burndown(/:id)?', function (req, res, next) {
 router.post('/burndown/:id', (req, res) => {
     var data = {}
     data.table = []
-    console.log(req.params.id)
     var progresso = {
         idSprint: req.params.id,
         date: null,
@@ -231,7 +239,6 @@ router.post('/sprint(/success)?', (req, res) => {
     dataSprint.nome = req.body.nome;
     dataSprint.endDate = req.body.dias
     dataSprint.tasks = req.body.tasks;
-    console.log(req.body)
     if (dataSprint.endDate || dataSprint.tasks) {
         insertSprint(dataSprint)
     }
@@ -262,10 +269,6 @@ router.get('/burndown/progresso(/:id)?', (req, res) => {
                     var content = content
                     var now = new Date();
                     var dateMoment = moment(now).format('YYYY-MM-DD')
-                    console.log(content[0])
-                    if (content[0].nome) {
-                        console.log(content[0].nome)
-                    }
                     var content = content[0].nome
                     selectSprint(function (err, results) {
                         if (err) {
@@ -303,7 +306,6 @@ router.post('/burndown/progresso(/:id)?', (req, res) => {
         extra: req.body.extra
     }
     insertProgresso(progresso)
-    console.log(progresso)
     res.redirect(`/burndown/${req.params.id}`)
 })
 

@@ -7,7 +7,7 @@
 // var lines = [], id = 0;
 // var linesOn = false;
 
-// var data = {    
+// var data = {
 //     datasets:[{
 //         label: "Remaining tasks",
 //         backgroundColor: window.chartColors.blue,
@@ -31,8 +31,8 @@
 //         borderWidth: 1,
 //         data: ideal,
 //         lineTension: 0,
-//         fill: false,        
-//     }, 
+//         fill: false,
+//     },
 //     ]
 // };
 // addLine(0);
@@ -123,19 +123,32 @@ var dbBugs = []
 var dbRemaining = []
 var dbImprovements = []
 var dbExtras = []
-{% for dado in content %}
-dbRemaining.push({{ dado.remaining_tasks }})
-dbBugs.push({{ dado.bugs }})
-dbImprovements.push({{ dado.improvements }})
-dbExtras.push({{ dado.extra_tasks }})
+var remainingContentLine = []
+var include =[]
 
+{% for dado in includeDate %}
+  include.push('{{ dado }}')
 {% endfor %}
+{% for dado in content %}
+  remainingContentLine.push('{{dado.data}}')
+{% endfor %}
+for(let i = 0; i <= {{dayAmount}}; i++){
+  if(include.includes(remainingContentLine[i])){
+    console.log({{content.indexOf(include[i])}})
+  }
+}
+console.log(include, remainingContentLine)
+var dayAmount = {{dayAmount}}
+for(let i = 0 ; i<=dayAmount ; i++){
+  dbRemaining.push(NaN)
+}
+console.log(dbRemaining)
 
 let month = day.toLocaleDateString('pt-br', {
-    month: '2-digit',
+  month: '2-digit',
 })
 
-document.getElementById('date').setAttribute('value', '{{dateMoment}}');
+document.getElementById("date").setAttribute('value', '{{dateMoment}}');
 var i = 0
 {% for item in datas %}
 DATAS.push('{{item}}');
@@ -146,8 +159,6 @@ i = i+1
 c.push({{item.label}})
 i=i++
 {% endfor %}
-console.log(dbRemaining)
-var ideal = [30, 2, 4, NaN, NaN, 2];
 var labels = DATAS;
 
 var lines = [], id = 0;
@@ -156,9 +167,9 @@ var linesOn = false;
 Chart.defaults.line.spanGaps = true;
 
 Chart.scaleService.updateScaleDefaults('linear', {
-    ticks: {
-        min: 0
-    }
+  ticks: {
+    min: 0
+  }
 });
 
 var data = {
@@ -166,21 +177,21 @@ var data = {
   datasets: [{
     label: "Remaining tasks",
     lineTension: 0,
-    backgroundColor: "rgba(5,215,2,0.2)",
-    borderColor: "rgba(5,215,2,1)",
+    backgroundColor: "blue",
+    borderColor: "blue",
     borderWidth: 2,
-    hoverBackgroundColor: "rgba(5,215,2,0.4)",
-    hoverBorderColor: "rgba(5,215,2,1)",
+    hoverBackgroundColor: "blue",
+    hoverBorderColor: "blue",
     data: dbRemaining,
-    fill: false
+    fill: false,
   },{
     label: "Ideal",
     lineTension: 0,
-    backgroundColor: "rgba(5,215,2,0.2)",
+    backgroundColor: "black",
     borderColor: "black",
     borderWidth: 2,
-    hoverBackgroundColor: "rgba(5,215,2,0.4)",
-    hoverBorderColor: "rgba(5,215,2,1)",
+    hoverBackgroundColor: "black",
+    hoverBorderColor: "black",
     data: [{{ideal}}],
     fill: false
   }]
@@ -211,20 +222,9 @@ var option = {
       type: 'linear',
     }],
   },
-  animation: {
-    duration: 1,
-    onComplete: function () {
-      var ctx = this.chart.ctx;
-      console.log("onComplete", this,Chart.defaults.global)
-      ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
-      ctx.textAlign = "center";
-      ctx.textBaseline = "bottom";
-      var line = this.chart.annotation.elements.line1,
-      x = line._model.x1-15,
-      y = line._model.y1+5;
-      ctx.fillStyle = line.options.label.fontColor;
-      ctx.fillText("Y",x,y);
-		}
+  tooltips: {
+    mode: 'index',
+    intersect: false,
   }
 };
 
