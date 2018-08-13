@@ -1,1 +1,2 @@
-docker-compose up app application
+#!/bin/bash
+docker-compose up $@
