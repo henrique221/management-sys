@@ -1,10 +1,12 @@
 FROM node:10-alpine
-  
+
 RUN mkdir -p /app
 
 WORKDIR /app
 
 RUN npm install nodemon -g
+
+RUN yarn
 
 COPY . .
 
