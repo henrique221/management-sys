@@ -129,11 +129,17 @@ var dbExtras = []
 {% for item in includeDate %}
 {% if !item %}
 dbRemaining.push(NaN)
+dbBugs.push(NaN)
+dbExtras.push(NaN)
+dbImprovements.push(NaN)
 {% else %}
 dbRemaining.push('{{item.remaining}}')
+dbBugs.push('{{item.bugs}}')
+dbExtras.push('{{item.extra}}')
+dbImprovements.push('{{item.improvements}}')
 {%endif%}
 {%endfor%} 
-console.log(dbRemaining)
+console.log(dbRemaining, dbBugs, dbExtras, dbImprovements)
 
 let month = day.toLocaleDateString('pt-br', {
   month: '2-digit',
@@ -174,6 +180,36 @@ var data = {
     hoverBackgroundColor: "blue",
     hoverBorderColor: "blue",
     data: dbRemaining,
+    fill: false,
+  },{
+    label: "Bugs",
+    lineTension: 0,
+    backgroundColor: "red",
+    borderColor: "red",
+    borderWidth: 2,
+    hoverBackgroundColor: "red",
+    hoverBorderColor: "red",
+    data: dbBugs,
+    fill: false,
+  },{
+    label: "Improvements",
+    lineTension: 0,
+    backgroundColor: "green",
+    borderColor: "green",
+    borderWidth: 2,
+    hoverBackgroundColor: "green",
+    hoverBorderColor: "green",
+    data: dbImprovements,
+    fill: false,
+  },{
+    label: "Extra",
+    lineTension: 0,
+    backgroundColor: "yellow",
+    borderColor: "yellow",
+    borderWidth: 2,
+    hoverBackgroundColor: "yellow",
+    hoverBorderColor: "yellow",
+    data: dbExtras,
     fill: false,
   },{
     label: "Ideal",

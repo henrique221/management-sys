@@ -97,7 +97,7 @@ router.get('/burndown(/:id)?', function (req, res, next) {
                         }
                     }
                     var tasksAndDays = []
-                    var dateRemaining = []
+                    var dataTasks = []
                     var includeDate = []
                     
                     for (let i = 0; i < dayAmount; i++) {
@@ -105,10 +105,16 @@ router.get('/burndown(/:id)?', function (req, res, next) {
                             var dayRemaining = content[i].data.getDate()
                             var monthRemaining = content[i].data.getMonth()
                             var yearRemaining = content[i].data.getFullYear()
-                            dateRemaining.push({data : moment([yearRemaining, monthRemaining, dayRemaining]).format('DD/MM ddd'), remaining: content[i].remaining_tasks})
-                            content[i].data = dateRemaining[i].data
+                            dataTasks.push({
+                                data : moment([yearRemaining, monthRemaining, dayRemaining]).format('DD/MM ddd'), 
+                                remaining : content[i].remaining_tasks,
+                                bugs : content[i].bugs,
+                                improvements : content[i].improvements,
+                                extra : content[i].extra_tasks
+                            })
+                            content[i].data = dataTasks[i].data
                             tasksAndDays.push({
-                                data: dateRemaining[i].data,
+                                data: dataTasks[i].data,
                                 tasks: content[i].total_tasks
                             })
                             
@@ -120,13 +126,13 @@ router.get('/burndown(/:id)?', function (req, res, next) {
                         includeDate.push(NaN)
                     }
                     for(let i = 0; i<datas.length; i++){
-                        if(dateRemaining[i]){
-                            if(datas.includes(dateRemaining[i].data)){
-                                includeDate[datas.indexOf(dateRemaining[i].data)] = dateRemaining[i]
+                        if(dataTasks[i]){
+                            if(datas.includes(dataTasks[i].data)){
+                                includeDate[datas.indexOf(dataTasks[i].data)] = dataTasks[i]
                             }
                         }
                     }
-                    console.log(includeDate, dateRemaining)
+                    console.log(includeDate, dataTasks)
                     selectSprint(function (err, results) {
                         if (err) {
                             next(err)
