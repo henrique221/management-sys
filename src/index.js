@@ -84,7 +84,7 @@ router.get('/burndown(/:id)?', function (req, res, next) {
                     var month = startDateContent.getMonth()
                     var year = startDateContent.getFullYear()
                     var day = startDateContent.getDate()
-
+                    
                     var singleDay = moment([year, month, day]);
                     var datas = []
                     var dayCount = singleDay
@@ -98,36 +98,35 @@ router.get('/burndown(/:id)?', function (req, res, next) {
                     }
                     var tasksAndDays = []
                     var dateRemaining = []
+                    var includeDate = []
+                    
                     for (let i = 0; i < dayAmount; i++) {
                         if (content[i] && content[i].data) {
                             var dayRemaining = content[i].data.getDate()
                             var monthRemaining = content[i].data.getMonth()
                             var yearRemaining = content[i].data.getFullYear()
-                            dateRemaining.push(moment([yearRemaining, monthRemaining, dayRemaining]).format('DD/MM ddd'))
-                            content[i].data = dateRemaining[i]
+                            dateRemaining.push({data : moment([yearRemaining, monthRemaining, dayRemaining]).format('DD/MM ddd'), remaining: content[i].remaining_tasks})
+                            content[i].data = dateRemaining[i].data
                             tasksAndDays.push({
                                 data: dateRemaining[i].data,
                                 tasks: content[i].total_tasks
                             })
-
-
-
+                            
                         } else {
                             tasksAndDays.push(NaN)
                         }
                     }
-                    var includeDate = []
                     for(let i = 0; i<datas.length; i++){
                         includeDate.push(NaN)
                     }
                     for(let i = 0; i<datas.length; i++){
-                        if(datas.includes(dateRemaining[i])){
-                            includeDate[datas.indexOf(dateRemaining[i])] = datas[datas.indexOf(dateRemaining[i])]
-                            // console.log(dateRemaining[i])
-                            console.log(datas.indexOf(dateRemaining[i]))
+                        if(dateRemaining[i]){
+                            if(datas.includes(dateRemaining[i].data)){
+                                includeDate[datas.indexOf(dateRemaining[i].data)] = dateRemaining[i]
+                            }
                         }
                     }
-                    console.log(content[0])
+                    console.log(includeDate, dateRemaining)
                     selectSprint(function (err, results) {
                         if (err) {
                             next(err)
@@ -154,9 +153,9 @@ router.get('/burndown(/:id)?', function (req, res, next) {
                     res.redirect(`/burndown/progresso/${req.params.id}`)
                 }
             }
-
+            
         })
-
+        
     }
 });
 
@@ -182,24 +181,24 @@ router.post('/burndown/:id', (req, res) => {
     progresso.bugs = req.body.bugs;
     progresso.extra = req.body.extra;
     progresso.improvements = req.body.improvements
-
+    
     dataSprint.date = req.body.initialDate;
     dataSprint.nome = req.body.nome;
     req.body.dias = moment(dataSprint.date).add(req.body.dias, 'days').format('YYYY-MM-DD')
     dataSprint.endDate = req.body.dias
     dataSprint.tasks = req.body.tasks;
-
+    
     if (progresso.data || progresso.remainingTasks || progresso.bugs || progresso.bugs || progresso.improvements) {
         insertProgresso(progresso)
     }
     if (dataSprint.dias || dataSprint.tasks) {
         insertSprint(dataSprint)
     }
-
+    
     if (!req.body) {
         console.log('nothing to submit')
     };
-
+    
     res.redirect(`/burndown/${req.params.id}`);
 });
 
@@ -285,13 +284,13 @@ router.get('/burndown/progresso(/:id)?', (req, res) => {
                                 resp
                             }
                         )
-
+                        
                     })
                 } catch {
                     res.redirect('/progresso/error')
                 }
             }
-
+            
         })
     }
 })

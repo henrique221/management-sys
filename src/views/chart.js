@@ -123,25 +123,16 @@ var dbBugs = []
 var dbRemaining = []
 var dbImprovements = []
 var dbExtras = []
-var remainingContentLine = []
-var include =[]
 
-{% for dado in includeDate %}
-  include.push('{{ dado }}')
-{% endfor %}
-{% for dado in content %}
-  remainingContentLine.push('{{dado.data}}')
-{% endfor %}
-for(let i = 0; i <= {{dayAmount}}; i++){
-  if(include.includes(remainingContentLine[i])){
-    console.log({{content.indexOf(include[i])}})
-  }
-}
-console.log(include, remainingContentLine)
-var dayAmount = {{dayAmount}}
-for(let i = 0 ; i<=dayAmount ; i++){
-  dbRemaining.push(NaN)
-}
+
+
+{% for item in includeDate %}
+{% if !item %}
+dbRemaining.push(NaN)
+{% else %}
+dbRemaining.push('{{item.remaining}}')
+{%endif%}
+{%endfor%} 
 console.log(dbRemaining)
 
 let month = day.toLocaleDateString('pt-br', {
