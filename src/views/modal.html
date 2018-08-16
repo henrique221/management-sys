@@ -40,9 +40,9 @@
                             </div>
                         </div>
                     </div>
-            </div>
+                </div>
             </form>
-
+            
         </div>
     </div>
 </div>
@@ -61,7 +61,7 @@
                     </button>
                 </div>
                 <div class="modal-body mx-5">
-
+                    
                     <div class="form-group row d-flex justify-content-center">
                         <label for='date' class="col-sm-4 col-form-label">Date</label>
                         <div class='col-sm-8'>
@@ -95,7 +95,7 @@
                     <span class="d-flex justify-content-end">
                         <button class="btn btn-primary w-100" id='submit'>Save</button>
                     </span>
-
+                    
                 </div>
             </div>
         </div>
@@ -103,13 +103,27 @@
 </form>
 
 <div class="text-center d-flex justify-content-end">
-    <button type="button" class="d-none d-md-block btn btn-primary col-3 mr-5 " data-toggle="modal" data-target="#modalSubscriptionForm">Add progress
+    <button type="button" class="d-none d-md-block btn btn-primary col-3  " data-toggle="modal" data-target="#modalSubscriptionForm">Add progress
         <i class="fa fa-area-chart" aria-hidden="true"></i>
     </button>
+    <!--Dropdown primary-->
+    <!-- Basic dropdown -->
+    <!--Dropdown primary-->
+    <div class="dropdown">
+        
+        <!--Trigger-->
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Progresses</button>
+        
+        
+        <!--Menu-->
+        <div class="dropdown-menu dropdown-primary">
+            {% for item in datas %}
+                <button class="dropdown-item" href="#" value="{{item}}">{{item}}</button>
+            {% endfor %}
+        </div>
+    </div>
+    <!--/Dropdown primary-->
 </div>
-
-
-
 <script>
     document.getElementById('date').setAttribute('value', '{{dateMoment}}')
 </script>

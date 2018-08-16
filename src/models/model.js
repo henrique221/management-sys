@@ -110,6 +110,27 @@ function selectSprint(callback) {
   })
 }
 
+function selectSprintById(id, callback) {
+  connection.query(`SELECT * FROM sprint where id = ${id}`, function(err, rows){
+    if (err) {
+      callback(null, rows);
+    } else
+    callback(null, rows);
+  })
+}
+
+function selectSprintId(nome, callback) {
+  connection.query(`SELECT id FROM sprint WHERE nome = ${nome}`, function(err, rows){
+    if (err) {
+      console.error('error connecting: ' + err.stack);
+      return log(`Query failed`, err, query);
+    }
+    else
+    callback(null, rows)
+    var result = callback
+  })
+}
+
 function selectSprintName(id, callback) {
   connection.query(`SELECT nome FROM sprint WHERE id = ${id}`, function(err, rows){
     if (err) {
@@ -129,3 +150,5 @@ module.exports.selectSprint = selectSprint;
 module.exports.insertSprint = insertSprint;
 module.exports.selectProgressoSprint = selectProgressoSprint;
 module.exports.selectSprintName = selectSprintName;
+module.exports.selectSprintId = selectSprintId;
+module.exports.selectSprintById = selectSprintById;
