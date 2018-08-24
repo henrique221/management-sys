@@ -4,7 +4,9 @@ RUN mkdir -p /app
 
 WORKDIR /app
 
-RUN npm install
+RUN yarn
+
+RUN npm install -g
 
 RUN npm install -g nodemon gulp
 
@@ -13,8 +15,6 @@ RUN npm install gulp
 RUN npm install npm-install-all -g
 
 RUN npm i bundle-collapser
-
-RUN yarn
 
 COPY . .
 
