@@ -23,6 +23,7 @@ services:
   application:
     build: .
     command: "npm run dev"
+    
     ports:
     - "80:8080"
     volumes:
