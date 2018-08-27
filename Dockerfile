@@ -12,6 +12,8 @@ RUN npm install gulp
 
 RUN yarn
 
+RUN npm-install-all gulpfile.js
+
 COPY . .
 
 EXPOSE 8080
