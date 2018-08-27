@@ -1,0 +1,12 @@
+
+{
+    "defaultEnv": "mysql",
+    "mysql":{
+        "host" : "db",
+        "driver" : "mysql", 
+        "user" : "root",
+        "database" : "burndown",
+        "password" : "password",
+        "multipleStatements": true
+    }
+}
