@@ -8,8 +8,6 @@ RUN npm install
 
 RUN npm install -g nodemon gulp
 
-RUN npm install gulp 
-
 RUN yarn
 
 COPY . .

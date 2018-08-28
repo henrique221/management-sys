@@ -45,6 +45,14 @@ function close() {
   connection.end();
 }
 
+function createDatabase(database) {
+  connection.query(`${database}`,
+function (err, fields) {
+  if (err) throw err;
+}
+);
+}
+
 function insertSprint(sprint) {
   connection.query(`
   INSERT INTO sprint
@@ -152,3 +160,4 @@ module.exports.selectProgressoSprint = selectProgressoSprint;
 module.exports.selectSprintName = selectSprintName;
 module.exports.selectSprintId = selectSprintId;
 module.exports.selectSprintById = selectSprintById;
+module.exports.createDatabase = createDatabase;
