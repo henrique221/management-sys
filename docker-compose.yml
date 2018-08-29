@@ -6,7 +6,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - data:/var/lib/mysql
+      - db_data:/var/lib/mysql
       - ./burndown.sql:/docker-entrypoint-initdb.d/burndown.sql
     environment:
       - MYSQL_ROOT_PASSWORD=password
@@ -42,4 +42,4 @@ services:
 
 
 volumes:
-  data:
+  db_data:
