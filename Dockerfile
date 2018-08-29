@@ -15,3 +15,9 @@ COPY . .
 EXPOSE 8080
 
 CMD ["node", "src/index.js"]
+
+FROM mysql:5.6
+
+COPY setup.sh /mysql/setup.sh
+COPY burndown.sql /mysql/burndown.sql
+RUN /mysql/setup.sh
