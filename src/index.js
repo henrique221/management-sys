@@ -10,7 +10,6 @@ const router = express.Router();
 const moment = require('moment')
 const business = require('moment-business')
 const fs = require('fs')
-
 const {
     insertSprint,
     insertProgresso,
