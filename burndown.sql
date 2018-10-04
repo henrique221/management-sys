@@ -32,4 +32,3 @@ CREATE TABLE IF NOT EXISTS `progresso` (
   PRIMARY KEY (`id_progresso`),
   FOREIGN KEY (`id_sprint`) REFERENCES `sprint` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
