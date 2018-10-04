@@ -21,6 +21,7 @@ const {
     selectSprintById
 } = require('./models/model')
 
+const ProgressController = require('./controllers/factories/progressController').make();
 
 app.use(bodyParser.urlencoded({
     extended: false
@@ -47,6 +48,10 @@ router.get('/home', (req, res) => {
     })
 })
 
+router.get(
+    '/progress/remove/:id',
+    (req, res, next) => ProgressController.delete(req, res, next)
+);
 
 router.get('/burndown(/:id)?', function (req, res, next) {
     if (req.params.id == null || req.params.id == 'undefined') {
