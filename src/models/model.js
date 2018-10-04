@@ -1,10 +1,11 @@
 var mysql = require('mysql');
 
+console.log("############################################" + process.env.DB_HOST)
 var config = {
-  host: 'db',
-  user: 'root',
-  database: 'burndown',
-  password: 'password',
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
 };
 
 var connection = connect();
@@ -43,14 +44,6 @@ function query() {
 
 function close() {
   connection.end();
-}
-
-function createDatabase(database) {
-  connection.query(`${database}`,
-    function (err, fields) {
-      if (err) throw err;
-    }
-  );
 }
 
 function insertSprint(sprint) {
@@ -167,5 +160,4 @@ module.exports.selectProgressoSprint = selectProgressoSprint;
 module.exports.selectSprintName = selectSprintName;
 module.exports.selectSprintId = selectSprintId;
 module.exports.selectSprintById = selectSprintById;
-module.exports.createDatabase = createDatabase;
 module.exports.removeProgresso = removeProgresso;
