@@ -2,8 +2,6 @@
 <html lang="pt-br">
 
 <head>
-
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -18,14 +16,26 @@
     <link href="/static/assets/css/style.css" rel="stylesheet">
     <link href="/static/assets/css/menu.css" rel="stylesheet">
 
+    {% block head %}
+    {% endblock %}
+
+    <title>
+        {% block title %}
+            Management Sys
+        {% endblock %}
+    </title>
+
 </head>
 
 <body>
 
     {% include './header.html' %}
+
     {% set results = results %}
+
     {% block content %}
     {% endblock %}
+
     <!-- JQuery -->
     <script type="text/javascript" src="/static/assets/js/jquery-3.3.1.min.js"></script>
     <!-- Bootstrap tooltips -->
@@ -35,6 +45,8 @@
     <!-- MDB core JavaScript -->
     <script type="text/javascript" src="/static/assets/js/mdb.min.js"></script>
 
+    {% block script %}
+    {% endblock %}
 
 </body>
 
