@@ -4,23 +4,23 @@ class ProgressController{
     ) {
         this.progressRepository = progressRepository;
     }
-
+    
     delete(req, res, next) {
         this.progressRepository.delete(req.params.id);
         res.redirect('/home');
     }
-    selectAll(req, res, next) {
-        const callback = callback;
-        this.progressRepository.selectAll(req.params.sprintId, function(err, callback){
-            if (err) {
-                next(err)
-            } else {
-                const callback = callback
+    get(req, res, next) {
+        this.progressRepository.selectAllBySprintId(req.params.sprintId, function(results) {
+            console.log("CALLBACK CONTROLLER#########"+results[0].data);
+            const resultsList = []
+            for(var item=0; item<=results.length; item++){
+                resultsList.push(results[item])
             }
-            res.render('progressList.html', {
-                    callback
+            res.render(
+                'progressList.html', {
+                    resultsList
                 }
-            )
+            );
         });
     }
 }
