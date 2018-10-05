@@ -54,8 +54,8 @@ router.get(
 );
 
 router.get(
-    '/burndown/list/:sprintId',
-    (req, res, next) => ProgressController.selectAll(req, res, next)
+    '/progress/list/:sprintId',
+    (req, res, next) => ProgressController.get(req, res, next)
 )
 
 router.get('/burndown(/:id)?', function (req, res, next) {
