@@ -53,6 +53,11 @@ router.get(
     (req, res, next) => ProgressController.delete(req, res, next)
 );
 
+router.get(
+    '/burndown/list/:sprintId',
+    (req, res, next) => ProgressController.selectAll(req, res, next)
+)
+
 router.get('/burndown(/:id)?', function (req, res, next) {
     if (req.params.id == null || req.params.id == 'undefined') {
         res.redirect('home')
