@@ -18,15 +18,18 @@ class Progress {
             }
         );
     }
-    selectAll(sprintId, callback) {
+
+    selectAllBySprintId(sprintId, callback) {
         this.connection.query(
             `SELECT * FROM progresso WHERE id_sprint = ${sprintId}`,
-            function (err, rows) {
+            function (err, results, fields ) {
                 if (err) {
                     console.error('error connecting: ' + err.stack);
                     return log(`Query failed`, err, query);
-                } else
-                    callback(null, rows)
+                } else {
+                    console.log("RESULTS ############ "+results, "FIELDS#############"+fields);
+                    callback(results);
+                }
             }
         )
     }
