@@ -27,7 +27,6 @@ class Progress {
                     console.error('error connecting: ' + err.stack);
                     return log(`Query failed`, err, query);
                 } else {
-                    console.log("RESULTS ############ "+results, "FIELDS#############"+fields);
                     callback(results);
                 }
             }
