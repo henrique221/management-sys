@@ -1,8 +1,10 @@
 class ProgressController{
     constructor(
-        progressRepository
+        progressRepository,
+        dateService
     ) {
         this.progressRepository = progressRepository;
+        this.dateService = dateService
     }
     
     delete(req, res, next) {
@@ -10,19 +12,17 @@ class ProgressController{
         res.redirect('/home');
     }
     get(req, res, next) {
-        this.progressRepository.selectAllBySprintId(req.params.sprintId, function(results) {
-            console.log("CALLBACK CONTROLLER#########"+results[0].data);
-            const resultsList = []
-            for(var item=0; item<=results.length; item++){
-                resultsList.push(results[item])
-            }
+        this.progressRepository.selectAllBySprintId(req.params.sprintId, (results) => {
+            results.map((item) => {
+                item.data = this.dateService.simpleFormat(item.data, 'DD/MM/YYYY');
+            });
             res.render(
                 'progressList.html', {
-                    resultsList
+                    results
                 }
             );
         });
     }
 }
 
-module.exports = ProgressController
+module.exports = ProgressController;
