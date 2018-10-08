@@ -1,4 +1,16 @@
-{% for item in resultsList %}
-    {{item}}
+{% extends "./layout/main.html" %}
+
+{% block content %}
+<h1>Sprint {{results[0].id_sprint}}</h1>
+{% for item in results %}
+    <h3>Data {{item.data}}</h3>
+    <p>Remaining tasks {{item.remaining_tasks}}</p>
+    <p>Bugs {{item.bugs}}</p>
+    <p>Extras {{item.extra_tasks}}</p>
+    <p>Improvements {{item.improvements}}</p>
+    <button>Edit</button> <button>Delete</button>
+    <p>-------------------------------------</p>
+    <p>-------------------------------------</p>
+    <p>-------------------------------------</p>
 {% endfor %}
-<h1>Teste</h1>
+{% endblock %}
