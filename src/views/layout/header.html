@@ -60,7 +60,7 @@
                 <button class="btn btn-light-blue rounded" style="box-shadow: 0 0 0 " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-area-chart" aria-hidden="true"></i> Sprints</button>
                 <div class="dropdown-menu">
                     {% set cont = 0 %}
-                    {% for item in results %}
+                    {% for item in resultsList %}
                     {% set cont = cont+1 %}
                     <a class='dropdown-item mr-5' href='/burndown/{{item.id}}'>{{cont}} - {{item.nome}}</a>
                     {% endfor %}

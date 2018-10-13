@@ -21,8 +21,8 @@ class Progress {
 
     selectAllBySprintId(sprintId, callback) {
         this.connection.query(
-            `SELECT * FROM progresso WHERE id_sprint = ${sprintId}`,
-            function (err, results, fields ) {
+            `SELECT * FROM progresso INNER JOIN sprint ON progresso.id_sprint = sprint.id AND progresso.id_sprint = ${sprintId}`,
+            function (err, results) {
                 if (err) {
                     console.error('error connecting: ' + err.stack);
                     return log(`Query failed`, err, query);
@@ -34,4 +34,4 @@ class Progress {
     }
 }
 
-module.exports = Progress
+module.exports = Progress;
