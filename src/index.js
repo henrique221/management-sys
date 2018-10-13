@@ -53,6 +53,11 @@ router.get(
     (req, res, next) => ProgressController.delete(req, res, next)
 );
 
+router.get(
+    '/progress/list/:sprintId',
+    (req, res, next) => ProgressController.get(req, res, next)
+)
+
 router.get('/burndown(/:id)?', function (req, res, next) {
     if (req.params.id == null || req.params.id == 'undefined') {
         res.redirect('home')
@@ -63,6 +68,7 @@ router.get('/burndown(/:id)?', function (req, res, next) {
                 res.status(500)
             } else {
                 try {
+                    const modalActionForProgress = "Add Progress"
                     var totalTasks = content[0].total_tasks;
                     var dayAmount = content[0].days;
                     var ideal = []
@@ -82,6 +88,7 @@ router.get('/burndown(/:id)?', function (req, res, next) {
                     var dateMoment = moment(now).format('YYYY-MM-DD')
                     var items = {}
                     var nomeSprint = content[0].nome
+                    var sprintId = content[0].id
                     for (const item of content) {
                         var date = moment(item.data)
                         items[date.format("DD-MM-YYYY")] = item
@@ -138,12 +145,11 @@ router.get('/burndown(/:id)?', function (req, res, next) {
                             }
                         }
                     }
-                    selectSprint(function (err, results) {
+                    selectSprint(function (err, resultsList) {
                         if (err) {
                             next(err)
                         } else {
-                            var results = results
-                        }
+                        
                         res.render(
                             'burndown.html', {
                                 content,
@@ -154,11 +160,13 @@ router.get('/burndown(/:id)?', function (req, res, next) {
                                 totalTasks,
                                 dayAmount,
                                 nomeSprint,
-                                results,
+                                resultsList,
                                 ideal,
-                                includeDate
+                                includeDate,
+                                sprintId,
+                                modalActionForProgress
                             }
-                        )
+                        )}
                     })
                 } catch {
                     res.redirect(`/burndown/progresso/${req.params.id}`)

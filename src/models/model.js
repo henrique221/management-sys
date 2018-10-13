@@ -94,7 +94,6 @@ function selectProgressoSprint(id, callback) {
   connection.query(`SELECT * FROM progresso INNER JOIN sprint on progresso.id_sprint = sprint.id where sprint.id = ${id}`, function (err, rows) {
     if (err) {
       console.error('error connecting: ' + err.stack);
-      return log(`Query failed`, err, query);
     } else
       callback(null, rows);
   });
@@ -104,7 +103,6 @@ function removeProgresso(date, idProgress) {
   connection.query(`DELETE FROM progresso WHERE data = ${date} AND id_progresso = ${idProgress}`, function (err, rows) {
     if (err) {
       console.error('error connecting: ' + err.stack);
-      return log(`Query failed`, err, query);
     } else
       callback(null, rows);
   })
@@ -133,7 +131,6 @@ function selectSprintId(nome, callback) {
   connection.query(`SELECT id FROM sprint WHERE nome = ${nome}`, function (err, rows) {
     if (err) {
       console.error('error connecting: ' + err.stack);
-      return log(`Query failed`, err, query);
     } else
       callback(null, rows)
     var result = callback
@@ -144,7 +141,6 @@ function selectSprintName(id, callback) {
   connection.query(`SELECT nome FROM sprint WHERE id = ${id}`, function (err, rows) {
     if (err) {
       console.error('error connecting: ' + err.stack);
-      return log(`Query failed`, err, query);
     } else
       callback(null, rows)
     var result = callback

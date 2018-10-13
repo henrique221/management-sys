@@ -1,0 +1,22 @@
+{% extends "./layout/main.html" %}
+{% block content %}
+{{weekday}}
+<h1 class='d-flex justify-content-center mb-5'>{{results[0].nome}}</h1>
+<div class="d-flex flex-wrap justify-content-center">
+    {% for item in results %}
+    <div class="m-md-2 mb-2 m-1 p-md-2 col-sm-0 col-md-5 rgba-grey-slight shadow">
+        <h3>{{item.formatData}}</h3>
+        <p>Remaining tasks {{item.remaining_tasks}}</p>
+        <p>Bugs {{item.bugs}}</p>
+        <p>Extras {{item.extra_tasks}}</p>
+        <p>Improvements {{item.improvements}}</p>
+        <div class='d-flex justify-content-center flex-row p-0'>
+            {% set parameters = {'style' : 'd-block btn btn-primary w-100 p-0 pl-3 pr-3', id: item.id_progresso} %}
+            {% include "modals/modalProgressEdit.html" %}
+            <button class='btn btn-danger w-100 pl-3 pr-3'>Delete</button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+</div>
+{% endblock %}
