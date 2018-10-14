@@ -22,7 +22,7 @@ const {
 } = require('./models/model')
 
 const ProgressController = require('./controllers/factories/progressController').make();
-
+const SprintController = require('./controllers/factories/sprintController').make();
 app.use(bodyParser.urlencoded({
     extended: false
 }))
@@ -33,18 +33,16 @@ app.set('views', path.join(__dirname, '/views/'));
 app.use('/static', express.static(path.join(__dirname, '../public/')));
 
 router.get('/home', (req, res) => {
-    selectSprint(function (err, results) {
+    selectSprint(function (err, resultsList) {
         if (err) {
             next(err)
         } else {
-            var results = results
+            res.render(
+                'index.html', {
+                    resultsList
+                }
+            );
         }
-        module.exports.results = selectSprint
-        res.render(
-            'index.html', {
-                results
-            }
-        );
     })
 })
 
@@ -56,7 +54,17 @@ router.get(
 router.get(
     '/progress/list/:sprintId',
     (req, res, next) => ProgressController.get(req, res, next)
-)
+);
+
+router.post(
+    '/progress/list/:sprintId',
+    (req, res, next) => ProgressController.delete(req, res, next)
+);
+
+router.post(
+    '/burndown/update/:id',
+    (req, res) => {SprintController.updateSprintDayAmount(req, res)}
+);
 
 router.get('/burndown(/:id)?', function (req, res, next) {
     if (req.params.id == null || req.params.id == 'undefined') {
@@ -97,7 +105,7 @@ router.get('/burndown(/:id)?', function (req, res, next) {
                     var month = startDateContent.getMonth()
                     var year = startDateContent.getFullYear()
                     var day = startDateContent.getDate()
-                    
+
                     var singleDay = moment([year, month, day]);
                     var datas = []
                     var dayCount = singleDay
@@ -112,69 +120,72 @@ router.get('/burndown(/:id)?', function (req, res, next) {
                     var tasksAndDays = []
                     var dataTasks = []
                     var includeDate = []
-                    
-                    for (let i = 0; i < dayAmount; i++) {
+
+                    for (let i = 0; i <= dayAmount; i++) {
                         if (content[i] && content[i].data) {
                             var dayRemaining = content[i].data.getDate()
                             var monthRemaining = content[i].data.getMonth()
                             var yearRemaining = content[i].data.getFullYear()
                             dataTasks.push({
-                                data : moment([yearRemaining, monthRemaining, dayRemaining]).format('DD/MM ddd'), 
-                                remaining : content[i].remaining_tasks,
-                                bugs : content[i].bugs,
-                                improvements : content[i].improvements,
-                                extra : content[i].extra_tasks
+                                data: moment([yearRemaining, monthRemaining, dayRemaining]).format('DD/MM ddd'),
+                                remaining: content[i].remaining_tasks,
+                                bugs: content[i].bugs,
+                                improvements: content[i].improvements,
+                                extra: content[i].extra_tasks
                             })
                             content[i].data = dataTasks[i].data
                             tasksAndDays.push({
                                 data: dataTasks[i].data,
                                 tasks: content[i].total_tasks
                             })
-                            
+
                         } else {
                             tasksAndDays.push(NaN)
                         }
                     }
-                    for(let i = 0; i<datas.length; i++){
+                    for (let i = 0; i <= datas.length; i++) {
                         includeDate.push(NaN)
                     }
-                    for(let i = 0; i<datas.length; i++){
-                        if(dataTasks[i]){
-                            if(datas.includes(dataTasks[i].data)){
+                    for (let i = 0; i <= datas.length; i++) {
+                        if (dataTasks[i]) {
+                            if (datas.includes(dataTasks[i].data)) {
                                 includeDate[datas.indexOf(dataTasks[i].data)] = dataTasks[i]
                             }
                         }
                     }
+                    const id = req.params.id;
                     selectSprint(function (err, resultsList) {
                         if (err) {
                             next(err)
                         } else {
-                        
-                        res.render(
-                            'burndown.html', {
-                                content,
-                                date,
-                                datas,
-                                title,
-                                dateMoment,
-                                totalTasks,
-                                dayAmount,
-                                nomeSprint,
-                                resultsList,
-                                ideal,
-                                includeDate,
-                                sprintId,
-                                modalActionForProgress
-                            }
-                        )}
+
+                            res.render(
+                                'burndown.html', {
+                                    id,
+                                    content,
+                                    date,
+                                    datas,
+                                    title,
+                                    dateMoment,
+                                    totalTasks,
+                                    dayAmount,
+                                    nomeSprint,
+                                    resultsList,
+                                    ideal,
+                                    includeDate,
+                                    sprintId,
+                                    modalActionForProgress
+                                }
+                            )
+                        }
                     })
                 } catch {
                     res.redirect(`/burndown/progresso/${req.params.id}`)
                 }
             }
-            
+
         })
-        
+
     }
 });
 
@@ -200,24 +211,24 @@ router.post('/burndown/:id', (req, res) => {
     progresso.bugs = req.body.bugs;
     progresso.extra = req.body.extra;
     progresso.improvements = req.body.improvements
-    
+
     dataSprint.date = req.body.initialDate;
     dataSprint.nome = req.body.nome;
     req.body.dias = moment(dataSprint.date).add(req.body.dias, 'days').format('YYYY-MM-DD')
     dataSprint.endDate = req.body.dias
     dataSprint.tasks = req.body.tasks;
-    
+
     if (progresso.data || progresso.remainingTasks || progresso.bugs || progresso.bugs || progresso.improvements) {
         insertProgresso(progresso)
     }
     if (dataSprint.dias || dataSprint.tasks) {
         insertSprint(dataSprint)
     }
-    
+    console.log('###############' + req.body.sprintId)
     if (!req.body) {
         console.log('nothing to submit')
     };
-    
+
     res.redirect(`/burndown/${req.params.id}`);
 });
 
@@ -259,86 +270,85 @@ router.post('/sprint(/success)?', (req, res) => {
     dataSprint.tasks = req.body.tasks;
     if (dataSprint.endDate || dataSprint.tasks) {
         insertSprint(dataSprint)
-        res.redirect(`sprint/success`)    
-        }
-    })
-    
-    router.get('/progresso/error', (req, res) => {
-        selectSprint(function (err, content) {
-            if (err) {
-                next(err)
-            } else {
-                var results = content
-                res.render('progresso_error.html', {
-                    results
-                })
-            }
-        })
-    })
-    router.get('/burndown/progresso(/:id)?', (req, res) => {
-        if (req.params.id == null || req.params.id == 'undefined') {
-            res.redirect('home')
+        res.redirect(`sprint/success`)
+    }
+})
+
+router.get('/progresso/error', (req, res) => {
+    selectSprint(function (err, content) {
+        if (err) {
+            next(err)
         } else {
-            selectSprintName(req.params.id, function (err, content) {
-                if (err) {
-                    next(err)
-                } else {
-                    try {
-                        var content = content
-                        var now = new Date();
-                        var dateMoment = moment(now).format('YYYY-MM-DD')
-                        var content = content[0].nome
-                        selectSprint(function (err, results) {
-                            if (err) {
-                                next(err)
-                            } else {
-                                var results = results
-                            }
-                        selectSprintById(req.params.id, function (err, ids) {
-                            if (err) {
-                                next(err)
-                            } else {
-                                var ids = ids[0]
-                            }
-                            console.log(ids)
-                            const firstRemaining = ids.total_tasks
-                            var resp = `Progress in " ${content} " still not registered`
-                            res.render(
-                                'progresso.html', {
-                                    content,
-                                    dateMoment,
-                                    resp,
-                                    firstRemaining,
-                                    ids,
-                                    results
-                                }
-                            )
-                            
-                        })
-                    })
-                    } catch {
-                        res.redirect('/progresso/error')
-                    }
-                }
-                
+            var results = content
+            res.render('progresso_error.html', {
+                results
             })
         }
     })
-    
-    router.post('/burndown/progresso(/:id)?', (req, res) => {
-        var progresso = {
-            idSprint: req.params.id,
-            date: req.body.date,
-            remainingTasks: req.body.remaining,
-            bugs: req.body.bugs,
-            improvements: req.body.improvements,
-            extra: req.body.extra
-        }
-        insertProgresso(progresso)
-        res.redirect(`/burndown/${req.params.id}`)
-    })
-    
-    
-    app.use('/', router);
-    
-    app.listen(8080);
+})
+router.get('/burndown/progresso(/:id)?', (req, res) => {
+    if (req.params.id == null || req.params.id == 'undefined') {
+        res.redirect('home')
+    } else {
+        selectSprintName(req.params.id, function (err, content) {
+            if (err) {
+                next(err)
+            } else {
+                try {
+                    var content = content
+                    var now = new Date();
+                    var dateMoment = moment(now).format('YYYY-MM-DD')
+                    var content = content[0].nome
+                    selectSprint(function (err, resultsList) {
+                        if (err) {
+                            next(err)
+                        } else {
+                            selectSprintById(req.params.id, function (err, ids) {
+                                if (err) {
+                                    next(err)
+                                } else {
+                                    var ids = ids[0]
+                                }
+                                console.log(ids)
+                                const firstRemaining = ids.total_tasks
+                                var resp = `Progress in " ${content} " still not registered`
+                                res.render(
+                                    'progresso.html', {
+                                        content,
+                                        dateMoment,
+                                        resp,
+                                        firstRemaining,
+                                        ids,
+                                        resultsList
+                                    }
+                                )
+
+                            })
+                        }
+                    })
+                } catch {
+                    res.redirect('/progresso/error')
+                }
+            }
+
+        })
+    }
+})
+
+router.post('/burndown/progresso(/:id)?', (req, res) => {
+    var progresso = {
+        idSprint: req.params.id,
+        date: req.body.date,
+        remainingTasks: req.body.remaining,
+        bugs: req.body.bugs,
+        improvements: req.body.improvements,
+        extra: req.body.extra
+    }
+    insertProgresso(progresso)
+    res.redirect(`/burndown/${req.params.id}`)
+})
+
+
+app.use('/', router);
+
+app.listen(8080);

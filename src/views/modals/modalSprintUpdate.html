@@ -1,0 +1,33 @@
+{% extends ../layout/main.html %}
+{% block modal %}
+
+<form action="/burndown/update/{{ id }}" method="POST">
+    <div class="modal fade" id="modalSubscriptionFormSprint" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title w-100 font-weight-bold">Update Sprint</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body mx-5">
+                    <div class="form-group row d-flex justify-content-center">
+                        <label for='dayAmount' class="col-sm-4 col-form-label">Day Amount</label>
+                        <div class='col-sm-8'>
+                            <input class="form-control" id='dayAmount' name='dayAmount' type='number' required>
+                        </div>
+                    </div>
+                    <span class="d-flex justify-content-end">
+                        <button class="btn btn-primary w-100" id='submit'>update</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<button type="button" class="{{ parameters.style }}" data-toggle="modal" data-target="#modalSubscriptionFormSprint">
+    Update Sprint
+</button>
+{% endblock %}

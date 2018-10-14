@@ -1,7 +1,9 @@
 {% extends "./layout/main.html" %}
 {% block content %}
 {{weekday}}
-<h1 class='d-flex justify-content-center mb-5'>{{results[0].nome}}</h1>
+<h1 class='d-flex justify-content-center mb-5'>
+    <a href="/burndown/{{results[0].id_sprint}}">{{results[0].nome}}</a>
+</h1>
 <div class="d-flex flex-wrap justify-content-center">
     {% for item in results %}
     <div class="m-md-2 mb-2 m-1 p-md-2 col-sm-0 col-md-5 rgba-grey-slight shadow">
@@ -13,10 +15,12 @@
         <div class='d-flex justify-content-center flex-row p-0'>
             {% set parameters = {'style' : 'd-block btn btn-primary w-100 p-0 pl-3 pr-3', id: item.id_progresso} %}
             {% include "modals/modalProgressEdit.html" %}
-            <button class='btn btn-danger w-100 pl-3 pr-3'>Delete</button>
+            <form class="d-flex col-5" method="POST" action="" id='ok'>
+                <input type="hidden" name="idProgress" value='{{item.id_progresso}}'>
+                <button class='btn btn-danger w-100 pl-3 pr-3'>Delete</button>
+            </form>
         </div>
     </div>
     {% endfor %}
-</div>
 </div>
 {% endblock %}

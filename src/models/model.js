@@ -75,7 +75,6 @@ function insertProgresso(progresso) {
   )`,
     function (err, rows) {
       if (err) throw err;
-
     }
   );
 }

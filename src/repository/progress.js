@@ -13,7 +13,7 @@ class Progress {
                     console.error('error connecting: ' + err.stack);
                     return log(`Query failed`, err, query);
                 } else {
-                    callback(null, rows);
+                    console.info(`Progress ${progressId} successfully deleted`)
                 }
             }
         );
@@ -25,7 +25,7 @@ class Progress {
             function (err, results) {
                 if (err) {
                     console.error('error connecting: ' + err.stack);
-                    return log(`Query failed`, err, query);
+                    var results = null;
                 } else {
                     callback(results);
                 }
