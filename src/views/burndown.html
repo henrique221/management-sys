@@ -23,6 +23,8 @@
         <div class="text-center d-flex justify-content-end">
             {% set parameters = {'style' : 'd-none d-md-block btn btn-primary col-3'} %}
             {% include "modals/modalProgress.html" %}
+            {% include "modals/modalSprintUpdate.html" %}
+            <a class='d-flex align-items-center justify-content-center btn btn-primary col-2' href='/progress/list/{{sprintId}}'>List progress</a>
         </div>
         <span class="d-flex justify-content-center">
             <div class="chart-container col-12" style="">
@@ -30,7 +32,6 @@
             </div>
         </span>
     </div>
-    <a href='/progress/list/{{sprintId}}'>List progress</a>
 {% endblock %}
 
 {% block script %}

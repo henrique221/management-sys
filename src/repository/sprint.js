@@ -18,6 +18,17 @@ class Sprint {
             }
         );
     }
+
+    updateSprintDayAmount(sprintId, dayAmount) {
+        this.connection.query(
+            `UPDATE sprint SET days = ${dayAmount} WHERE sprint.id = ${sprintId}` ,
+            function (err) {
+                if(err) {
+                    throw(err);
+                }
+            }
+        )
+    }
 }
 
 module.exports = Sprint;
