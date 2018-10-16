@@ -1,6 +1,4 @@
 var mysql = require('mysql');
-
-console.log("############################################" + process.env.DB_HOST)
 var config = {
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
