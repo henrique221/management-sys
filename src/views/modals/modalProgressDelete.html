@@ -1,0 +1,43 @@
+{% extends ../layout/main.html %}
+{% block modal %}
+
+
+{% for item in results %}
+
+<form action="" method="POST">
+    <div class="modal fade" id="modalSubscriptionFormDelete{{item.id_progresso}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title w-100 font-weight-bold">Delete progress - {{ item.formatData }} </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body mx-5">
+                    <form class="d-flex col-5" method="POST" action="" id='ok'>
+                        <h4>Are you sure you want to delete progress: </h4>
+                        <div class="table-info w-100 p-4 mt-3 mb-3">
+                                <h5 class="d-table-row">{{item.formatData}}</h5>
+                                <h5 class="d-table-row">Remaining tasks: {{item.remaining_tasks}}</h5>
+                                <h5 class="d-table-row">Bugs: {{item.bugs}}</h5>
+                                <h5 class="d-table-row">Extra tasks: {{item.extra_tasks}}</h5>
+                                <h5 class="d-table-row">Improvements: {{item.improvements}}</h5>
+                        </div>
+                        <span class="d-flex justify-content-center">
+                            <input type="hidden" name="idProgress" value='{{item.id_progresso}}'>
+                            <button class="btn btn-red w-100" data-dismiss="modal">Cancel</button>
+                            <button class="btn btn-primary w-100" id='submit'>Confirm</button>
+                        </span>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endfor %}
+<button type="button" class="d-block btn btn-red w-100 p-0 pl-3 pr-3" data-toggle="modal" id="{{ parameters.id }}" data-target="#modalSubscriptionFormDelete{{item.id_progresso}}">
+    Delete
+</button>
+{% endblock %}
+
