@@ -34,6 +34,11 @@ class ProgressController {
             });
         });
     }
+
+    update(req, res) {
+        this.progressRepository.updateProgress(req.params.idProgress, req.body);
+        res.redirect(`/progress/list/${req.params.idSprint}`)
+    }
 }
 
 module.exports = ProgressController;

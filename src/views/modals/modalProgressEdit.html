@@ -4,7 +4,7 @@
 
 {% for item in results %}
 
-<form action="" method="POST">
+<form action="/progress/update/{{item.id_sprint}}/{{item.id_progresso}}" method="POST">
     <div class="modal fade" id="modalSubscriptionForm{{item.id_progresso}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -15,7 +15,6 @@
                     </button>
                 </div>
                 <div class="modal-body mx-5">
-                    
                     <div class="form-group row d-flex justify-content-center">
                         <label for='date' class="col-sm-4 col-form-label">Date</label>
                         <div class='col-sm-8'>
@@ -56,7 +55,7 @@
     </div>
 </form>
 {% endfor %}
-<button type="button" class="{{ parameters.style }}" data-toggle="modal" id="{{ parameters.id }}" disabled data-target="#modalSubscriptionForm{{item.id_progresso}}">
+<button type="button" class="{{ parameters.style }}" data-toggle="modal" id="{{ parameters.id }}" data-target="#modalSubscriptionForm{{item.id_progresso}}">
     {{ modalActionForProgress }}
 </button>
 {% endblock %}

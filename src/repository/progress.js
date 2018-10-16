@@ -30,7 +30,25 @@ class Progress {
                     callback(results);
                 }
             }
-        )
+        );
+    }
+
+    updateProgress(progressId, dataProgress) {
+        console.log(dataProgress);
+        this.connection.query(
+            `UPDATE progresso SET 
+            data = '${dataProgress.date}', 
+            remaining_tasks = ${dataProgress.remaining},
+            bugs = ${dataProgress.bugs},
+            improvements = ${dataProgress.improvements},
+            extra_tasks = ${dataProgress.extra}
+            WHERE progresso.id_progresso = ${progressId};`,
+            function(err) {
+                if(err) {
+                    throw(err);
+                }
+            }
+        );
     }
 }
 
