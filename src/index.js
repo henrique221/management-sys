@@ -224,7 +224,6 @@ router.post('/burndown/:id', (req, res) => {
     if (dataSprint.dias || dataSprint.tasks) {
         insertSprint(dataSprint)
     }
-    console.log('###############' + req.body.sprintId)
     if (!req.body) {
         console.log('nothing to submit')
     };
@@ -309,7 +308,6 @@ router.get('/burndown/progresso(/:id)?', (req, res) => {
                                 } else {
                                     var ids = ids[0]
                                 }
-                                console.log(ids)
                                 const firstRemaining = ids.total_tasks
                                 var resp = `Progress in " ${content} " still not registered`
                                 res.render(

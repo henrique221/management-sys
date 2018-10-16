@@ -24,7 +24,6 @@ dbImprovements.push('{{item.improvements}}')
 {%endif%}
 
 {%endfor%} 
-console.log(dbRemaining, dbBugs, dbExtras, dbImprovements)
 
 let month = day.toLocaleDateString('pt-br', {
   month: '2-digit',
