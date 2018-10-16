@@ -66,6 +66,11 @@ router.post(
     (req, res) => {SprintController.updateSprintDayAmount(req, res)}
 );
 
+router.post(
+    '/progress/update/:idSprint/:idProgress',
+    (req, res) => {ProgressController.update(req, res)}
+);
+
 router.get('/burndown(/:id)?', function (req, res, next) {
     if (req.params.id == null || req.params.id == 'undefined') {
         res.redirect('home')

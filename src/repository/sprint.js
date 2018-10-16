@@ -27,7 +27,7 @@ class Sprint {
                     throw(err);
                 }
             }
-        )
+        );
     }
 }
 
