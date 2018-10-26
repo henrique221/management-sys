@@ -15,7 +15,7 @@ A management system to control burndown graphs
 
 ### Start application
 ```
-sh bin/start.sh
+docker-compose up {{ options }}
 ```
 * You will see the app on http://localhost/home
 
