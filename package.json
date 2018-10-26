@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/index.js",
-    "dev": "npm install && nodemon src/index.js",
+    "start": "yarn && node src/index.js",
+    "dev": "yarn && nodemon src/index.js",
     "gulp": "ash -c 'gulp build && exit'"
   },
   "dependencies": {
