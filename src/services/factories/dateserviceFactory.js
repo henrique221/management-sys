@@ -1,5 +1,5 @@
-const moment = require('moment')
-const DateService = require('../dateService')
+const moment = require('moment');
+const DateService = require('../dateService');
 
 class DateServiceFactory {
     static make() {

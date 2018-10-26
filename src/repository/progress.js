@@ -1,7 +1,5 @@
 class Progress {
-    constructor(
-        connection
-    ) {
+    constructor(connection) {
         this.connection = connection;
     }
 
@@ -13,7 +11,7 @@ class Progress {
                     console.error('error connecting: ' + err.stack);
                     return log(`Query failed`, err, query);
                 } else {
-                    console.info(`Progress ${progressId} successfully deleted`)
+                    console.info(`Progress ${progressId} successfully deleted`);
                 }
             }
         );

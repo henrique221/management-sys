@@ -9,4 +9,4 @@ class ProgressFactory {
     }
 }
 
-module.exports = ProgressFactory
+module.exports = ProgressFactory;

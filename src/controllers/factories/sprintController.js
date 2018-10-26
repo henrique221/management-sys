@@ -1,4 +1,4 @@
-const SprintController = require('../sprintController')
+const SprintController = require('../sprintController');
 const SprintRepository = require('../../repository/factories/sprint').make();
 
 class SprintControllerFactory {

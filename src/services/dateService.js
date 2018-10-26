@@ -1,12 +1,10 @@
 class DateService {
-    constructor (
-        moment
-    ) {
+    constructor (moment) {
         this.moment = moment;
     }
-    
+
     simpleFormat(date, format) {
-        return this.moment(date).format(format)
+        return this.moment(date).format(format);
     }
 }
 

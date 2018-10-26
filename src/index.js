@@ -13,11 +13,9 @@ const fs = require('fs')
 const {
     insertSprint,
     insertProgresso,
-    selectProgresso,
     selectProgressoSprint,
     selectSprint,
     selectSprintName,
-    selectSprintId,
     selectSprintById
 } = require('./models/model')
 
