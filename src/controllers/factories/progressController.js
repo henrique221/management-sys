@@ -13,4 +13,4 @@ class ProgressControllerFactory {
     }
 }
 
-module.exports = ProgressControllerFactory
+module.exports = ProgressControllerFactory;

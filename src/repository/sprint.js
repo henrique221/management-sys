@@ -1,7 +1,5 @@
 class Sprint {
-    constructor (
-        connection
-    ) {
+    constructor (connection) {
         this.connection = connection
     }
 

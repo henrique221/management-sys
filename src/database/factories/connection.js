@@ -5,8 +5,8 @@ class ConnectionFactory {
     static make() {
         return new Connection(
             mysql
-        ).connect()
+        ).connect();
     }
 }
 
-module.exports = ConnectionFactory
+module.exports = ConnectionFactory;
